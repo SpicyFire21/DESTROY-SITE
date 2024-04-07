@@ -1,0 +1,28 @@
+/*.hero-index {*/
+/*    position: absolute;*/
+/*    top: 30%;*/
+/*    left: 50%;*/
+/*    transform: translate(-50%, -50%);*/
+/*    color:rgb(255, 255, 255);*/
+/*    font-size: 5vw;*/
+/*    text-align: center;*/
+/*    font-family:'Franklin Gothic Medium';*/
+/*    width: fit-content;*/
+/*}*/
+
+
+/*.hero-index {*/
+/*    position: absolute;*/
+/*    */
+/*    animation: slideInfinite 15s linear infinite; */
+/*}*/
+
+/*@keyframes slideInfinite {*/
+/*    0% {*/
+/*        transform: translateX(120%); */
+/*    }*/
+
+/*    100% {*/
+/*        transform: translateX(-250%);*/
+/*    }*/
+/*}*/

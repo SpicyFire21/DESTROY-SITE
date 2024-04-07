@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>DESTROY - Connexion</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" >
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ url_for('static', filename='src/css/bootstrap.css') }}" >
+        <link rel="stylesheet" href="{{ url_for('static', filename='src/css/style.css') }}" >
+    {% endblock %}
+</head>
+<body>
+{% include 'auth/nav.html' %}
+
+<div class="container">
+    {% block body %}
+        <h1>Bienvenue a toi jeune Joueur</h1>
+        <br><br>
+        <a href="/base/init">init.</a>
+    {% endblock %}
+</div><!-- /.container -->
+
+
+
+
+
+
+</body>
+</html>

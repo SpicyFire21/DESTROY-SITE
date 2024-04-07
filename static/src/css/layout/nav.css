@@ -1,0 +1,41 @@
+nav {
+    background-color: var(--white);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
+}
+
+nav a {
+    text-decoration: none;
+    color: var(--black);
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1rem;
+    padding: 5px;
+    border: 2px solid var(--black);
+    border-radius:25px ;
+
+}
+
+nav a:hover {
+    transform: scale(1.2);
+    transition: 0.3s;
+}
+
+.nav-left h2 {
+    margin: 0;
+    
+}
+
+.nav-right,.nav-left {
+    gap: 10px;
+}
+
+.nav-right a,.nav-left a {
+    background-color: var(--lightgray);
+    color: var(--red);
+}
+.nav-left,.nav-right {
+    display: flex;
+    flex-direction: row ;
+}
