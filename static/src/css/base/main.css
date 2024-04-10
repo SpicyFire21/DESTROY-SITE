@@ -12,6 +12,47 @@ body {
     overflow-x: hidden; 
 }
 
+table {
+    background-color: var(--red);
+    margin: auto;
+}
+
+thead {
+    background-color: var(--white);
+}
+td {
+    background-color: var(--lightbeige);
+}
+
+td,th {
+    padding: 10px;
+}
+
+.form-edit fieldset{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    width: fit-content;
+    margin: 10vh auto 0 auto;
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    gap: 10px;
+}
 
 
 
+
+
+.custom-file-upload {
+  border: 1px solid #ccc;
+    border-radius: 50%;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+}

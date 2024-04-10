@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS joueurs;
+DROP TABLE IF EXISTS map;
 
 CREATE TABLE IF NOT EXISTS role(
    idRole INT NOT NULL AUTO_INCREMENT,
@@ -19,7 +20,55 @@ CREATE TABLE IF NOT EXISTS joueurs(
     FOREIGN KEY(idRole) REFERENCES Role(idRole)
 );
 
+CREATE TABLE IF NOT EXISTS map(
+  idMap INT NOT NULL AUTO_INCREMENT,
+  libelle VARCHAR(50),
+    PRIMARY KEY (idMap)
+);
+
+CREATE TABLE IF NOT EXISTS agent(
+  idAgent INT NOT NULL AUTO_INCREMENT,
+    nomAgent VARCHAR(50),
+    PRIMARY KEY (idAgent)
+);
+
+INSERT INTO agent (nomAgent) VALUES
+('Brimstone'),
+('Viper'),
+('Omen'),
+('Killjoy'),
+('Cypher'),
+('Sova'),
+('Sage'),
+('Phoenix'),
+('Jett'),
+('Reyna'),
+('Breach'),
+('Skye'),
+('Yoru'),
+('Astra'),
+('KAY/O'),
+('Iso'),
+('Raze'),
+('Deadlock'),
+('Fade'),
+('Chamber'),
+('Clove'),
+('Gekko'),
+('Harbor'),
+('Néon')
+;
 
 
 
+INSERT INTO map(idMap, libelle) VALUES
+(NULL,'Ascent'),
+(NULL,'Bind'),
+(NULL,'Breeze'),
+(NULL,'Icebox'),
+(NULL,'Lotus'),
+(NULL,'Split'),
+(NULL,'Sunset'),
+(NULL,'Fracture'),
+(NULL,'Haven');
 

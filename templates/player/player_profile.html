@@ -1,0 +1,35 @@
+{% include 'player/player_layout.html' %}
+
+
+<form method="POST" action="/editaccount" class="form-edit">
+    <div class="form-container">
+    <fieldset>
+        <input type="hidden" name="id" value="{{compte.idJoueur}}">
+
+        <div>
+            <input type="file" id="file-input" style="display: none;">
+            <label for="file-input" class="custom-file-upload">+</label>
+            <img id="selected-image" src="#" alt="Aperçu de l'image" style="display:none;">
+        </div>
+
+
+        <div>
+            <label for="pseudo">Pseudo : </label>
+            <input type="text" size="20" value="{{compte.pseudo}}" name="pseudo" id="pseudo" class="form-control"  required  placeholder="Pseudo" >
+        </div>
+        <div>
+            <label for="email">Email : </label>
+            <input type="text" size="20" value="{{compte.email}}" name="email" id="email" class="form-control" required autofocus placeholder="Email" >
+        </div>
+        <div>
+            <label for="mdp">Mot de Passe : </label>
+            <input type="password" size="20" name="mdp" id="mdp" class="form-control" required autofocus placeholder="Mot de Passe" >
+        </div>
+
+
+
+    </fieldset>
+
+    <button type="submit" name="submitedit" class="submit-edit">MODIFIER</button>
+    </div>
+</form>

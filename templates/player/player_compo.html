@@ -1,0 +1,45 @@
+{% include 'player/player_layout.html' %}
+<body>
+<table>
+
+  <caption>
+    Tableau des Compo
+  </caption>
+
+  <thead>
+    <tr>
+        <th></th>
+        {% for ligne in titulaire %}
+            <th scope="col">{{ligne.pseudo}}</th>
+        {% endfor %}
+    </tr>
+  </thead>
+
+  <tbody>
+        {% for ligne in maps %}
+           <tr>
+               <th>{{ligne.libelle}}</th>
+               <td>X</td>
+               <td>X</td>
+               <td>X</td>
+               <td>X</td>
+               <td>X</td>
+
+           </tr>
+
+        {% endfor %}
+
+  </tbody>
+
+  <tfoot>
+    <tr>
+        <th></th>
+        <th scope="row" >Duelliste</th>
+        <th scope="row" >Initiateur</th>
+        <th scope="row" >Flex</th>
+        <th scope="row" >Controlleur</th>
+        <th scope="row" >Sentinelle</th>
+    </tr>
+  </tfoot>
+</table>
+</body>

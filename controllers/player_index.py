@@ -11,4 +11,9 @@ player_index = Blueprint('player_index', __name__,
 
 @player_index.route('/player/index')
 def player_show():
-    return render_template('player/index.html')
+    mycursor = get_db().cursor()
+    id_user = session['id_user']
+    sql = '''SELECT * FROM joueurs WHERE idJoueur = %s;'''
+    mycursor.execute(sql, (id_user,))
+    joueurs = mycursor.fetchone()
+    return render_template('player/index.html',joueurs = joueurs)

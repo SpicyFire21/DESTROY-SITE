@@ -1,0 +1,47 @@
+{% include 'player/player_layout.html' %}
+<body>
+<table>
+
+  <caption>
+    Tableau du Roaster de DESTROY ACADEMY
+  </caption>
+
+  <thead>
+    <tr>
+        <th scope="col">Pseudo</th>
+        <th scope="col">Role</th>
+        <th scope="col"> Droit</th>
+        <th scope="col">Connecté</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    {% if roaster | length >= 1 %}
+        {% for ligne in roaster %}
+           <tr>
+                  <td>{{ ligne.pseudo }}</td>
+                  <td>{{ ligne.libelle }}</td>
+                    <td>{{ligne.fonction}}</td>
+                  <td>X</td>
+           </tr>
+        {% endfor %}
+    {% else %}
+            <tr>
+                  <td>
+                      pas de joueurs :C
+                  </td>
+           </tr>
+    {% endif %}
+
+
+  </tbody>
+
+  <tfoot>
+    <tr>
+            <th scope="row" colspan="3">Nombre de Joueurs</th>
+            <td>{{nbr_joueurs}}</td>
+    </tr>
+  </tfoot>
+</table>
+</body>
