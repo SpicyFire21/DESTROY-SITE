@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS joueurs;
 DROP TABLE IF EXISTS map;
 DROP TABLE IF EXISTS agent;
+# DROP TABLE IF EXISTS utilisateur;
+DROP TABLE IF EXISTS compo;
 
 CREATE TABLE IF NOT EXISTS role(
    idRole INT NOT NULL AUTO_INCREMENT,
@@ -21,6 +23,17 @@ CREATE TABLE IF NOT EXISTS joueurs(
     FOREIGN KEY(idRole) REFERENCES Role(idRole)
 );
 
+# CREATE TABLE IF NOT EXISTS utilisateur(
+#     idUtilisateur INT NOT NULL AUTO_INCREMENT,
+#     nomUtilisateur VARCHAR(50),
+#     email VARCHAR(50),
+#     mdp VARCHAR(255),
+#     idJoueur INT,
+#     PRIMARY KEY(idUtilisateur),
+#     FOREIGN KEY (idJoueur) REFERENCES joueurs(idJoueur)
+# );
+
+
 CREATE TABLE IF NOT EXISTS map(
   idMap INT NOT NULL AUTO_INCREMENT,
   libelle VARCHAR(50),
@@ -33,32 +46,60 @@ CREATE TABLE IF NOT EXISTS agent(
     PRIMARY KEY (idAgent)
 );
 
+CREATE TABLE IF NOT EXISTS compo(
+    idJoueur INT,
+    idMap INT,
+    idAgent INT,
+    PRIMARY KEY (idJoueur,idMap,idAgent),
+    FOREIGN KEY (idJoueur) REFERENCES joueurs(idJoueur),
+    FOREIGN KEY (idMap) REFERENCES map(idMap),
+    FOREIGN KEY (idAgent) REFERENCES agent(idAgent)
+);
+
+INSERT INTO compo (idJoueur, idMap, idAgent) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 3),
+(4, 4, 4),
+(5, 5, 5),
+(1, 6, 6),
+(2, 7, 7),
+(3, 1, 8),
+(4, 2, 9),
+(5, 3, 10),
+(1, 4, 11),
+(2, 5, 12),
+(3, 6, 13),
+(4, 7, 14),
+(5, 1, 15);
+
+
 INSERT INTO agent (nomAgent) VALUES
-('Brimstone'),
-('Viper'),
-('Omen'),
-('Killjoy'),
-('Cypher'),
-('Sova'),
-('Sage'),
-('Phoenix'),
-('Jett'),
-('Reyna'),
-('Breach'),
-('Skye'),
-('Yoru'),
 ('Astra'),
-('KAY/O'),
-('Iso'),
-('Raze'),
-('Deadlock'),
-('Fade'),
+('Breach'),
+('Brimstone'),
 ('Chamber'),
 ('Clove'),
+('Cypher'),
+('Deadlock'),
+('Fade'),
 ('Gekko'),
 ('Harbor'),
-('Néon')
-;
+('Iso'),
+('Jett'),
+('KAY/O'),
+('Killjoy'),
+('Neon'),
+('Omen'),
+('Phoenix'),
+('Raze'),
+('Reyna'),
+('Skye'),
+('Sage'),
+('Sova'),
+('Viper'),
+('Yoru');
+
 
 
 

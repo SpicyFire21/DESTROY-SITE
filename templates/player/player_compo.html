@@ -1,5 +1,6 @@
 {% include 'player/player_layout.html' %}
 <body>
+<main>
 <table>
 
   <caption>
@@ -16,18 +17,25 @@
   </thead>
 
   <tbody>
-        {% for ligne in maps %}
-           <tr>
-               <th>{{ligne.libelle}}</th>
-               <td>X</td>
-               <td>X</td>
-               <td>X</td>
-               <td>X</td>
-               <td>X</td>
+  {% for map in maps %}
+<tr>
+    <th>{{ map.libelle }}</th>
+    {% for joueur in titulaire %}
+        <td>
+        {% for compo_entry in compo %}
+            {% if map.idMap == compo_entry.idMap and joueur.idJoueur == compo_entry.idJoueur %}
 
-           </tr>
-
+                {{ compo_entry.nomAgent }}
+            {% endif %}
         {% endfor %}
+        </td>
+    {% endfor %}
+    <td><a href="/delete_row/{{map.idMap}}" class="delete-compo"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></td>
+</tr>
+{% endfor %}
+
+
+
 
   </tbody>
 
@@ -40,6 +48,48 @@
         <th scope="row" >Controlleur</th>
         <th scope="row" >Sentinelle</th>
     </tr>
+  <tr>
+      <th></th>
+      {% for joueur in titulaire %}
+        <th scope="row" ><a href="/delete_column/{{joueur.idJoueur}}" class="delete-compo"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></th>
+      {% endfor %}
+
+  </tr>
   </tfoot>
 </table>
+
+
+<form method="POST" action="/compo_edit" class="form-edit-compo">
+    <fieldset>
+        <div>
+        <label for="Map">Map :</label>
+        <select name="Map" id="Map" required>
+            {% for ligne in maps %}
+                <option value="{{ligne.idMap}}">{{ligne.libelle}}</option>
+            {% endfor %}
+        </select>
+        </div>
+        <div>
+        <label for="Agent">Agent :</label>
+        <select name="Agent" id="Agent" required>
+            {% for ligne in agents %}
+                <option value="{{ligne.idAgent}}">{{ligne.nomAgent}}</option>
+            {% endfor %}
+        </select>
+        </div>
+        <div>
+        <label for="Joueurs">Joueur :</label>
+        <select name="Joueurs" id="Joueurs">
+            {% for ligne in titulaire %}
+                <option value="{{ligne.idJoueur}}">{{ligne.pseudo}}</option>
+            {% endfor %}
+        </select>
+        </div>
+        <button type="submit" name="submitedit" class="submit-edit-compo">MODIFIER</button>
+    </fieldset>
+
+</form>
+
+
+</main>
 </body>
