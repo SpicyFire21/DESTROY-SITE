@@ -64,6 +64,10 @@ td,th {
     border-radius: 10px;
 }
 
+.roaster-body {
+    display: flex;
+    flex-direction: row;
+}
 
 .custom-file-upload {
   border: 1px solid #ccc;

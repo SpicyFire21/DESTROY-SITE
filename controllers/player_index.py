@@ -13,7 +13,13 @@ player_index = Blueprint('player_index', __name__,
 def player_show():
     mycursor = get_db().cursor()
     id_user = session['id_user']
+    print('id_user', id_user)
     sql = '''SELECT * FROM joueurs WHERE idJoueur = %s;'''
     mycursor.execute(sql, (id_user,))
-    joueurs = mycursor.fetchone()
-    return render_template('player/index.html',joueurs = joueurs)
+    player = mycursor.fetchone()
+    print(player)
+    if player:
+        return render_template('player/index.html', player = player)
+    else:
+        flash(u'Vous n\'avez pas les droits pour être inscrit en tant que Joueur ou votre compte n\'existe pas.', 'alert-warning')
+        return redirect('/login')

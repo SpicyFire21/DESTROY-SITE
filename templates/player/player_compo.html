@@ -23,8 +23,7 @@
     {% for joueur in titulaire %}
         <td>
         {% for compo_entry in compo %}
-            {% if map.idMap == compo_entry.idMap and joueur.idJoueur == compo_entry.idJoueur %}
-
+            {% if map.idMap == compo_entry.idMap and joueur.idJoueur == compo_entry.idJoueur and compo_entry.nomAgent != 'None' %}
                 {{ compo_entry.nomAgent }}
             {% endif %}
         {% endfor %}

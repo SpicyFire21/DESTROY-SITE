@@ -4,6 +4,7 @@
 from flask import Flask, request, render_template, redirect, session, g, flash, abort, url_for
 import pymysql.cursors
 
+from controllers.visitor_index import *
 from controllers.admin_index import *
 from controllers.fixtures_load import *
 from controllers.auth_security import *
@@ -42,6 +43,7 @@ app.register_blueprint(player_horaire)
 app.register_blueprint(player_compo)
 app.register_blueprint(player_strats)
 
+app.register_blueprint(visitor_index)
 
 
 

@@ -14,10 +14,13 @@ player_roaster = Blueprint('player_roaster', __name__,
 @player_roaster.route('/roaster_show')
 def player_roaster_show():
     mycursor = get_db().cursor()
-    sql = '''SELECT * FROM joueurs ;'''
+    sql = '''SELECT * FROM utilisateur u
+    join joueurs j on u.idJoueur = j.idJoueur
+    where u.fonction like 'player';'''
     mycursor.execute(sql)
     roaster = mycursor.fetchall()
     nbr_joueurs = len(roaster)
+    print('roaster :',roaster)
     get_db().commit()
     return render_template('player/player_roaster.html',
                            roaster = roaster,
@@ -28,7 +31,9 @@ def player_roaster_show():
 def editaccount():
     mycursor = get_db().cursor()
     id_user = session['id_user']
-    sql_all = '''SELECT * FROM joueurs WHERE idJoueur =%s;'''
+    sql_all = '''SELECT * FROM utilisateur u
+    JOIN joueurs j ON u.idJoueur = j.idJoueur
+    WHERE u.idUtilisateur =%s;'''
     mycursor.execute(sql_all,(id_user,))
     compte = mycursor.fetchone()
     print(compte)
@@ -43,7 +48,9 @@ def valid_editaccount():
     email = request.form.get('email', '')
     mdp = request.form.get('mdp', '')
     mdp = generate_password_hash(mdp, method = 'pbkdf2:sha256')
-    sql ='''UPDATE joueurs set pseudo=%s,email=%s,mdp=%s WHERE idJoueur=%s'''
+    sql ='''UPDATE utilisateur u
+    JOIN joueurs j ON u.idJoueur = j.idJoueur
+    set pseudo=%s,email=%s,mdp=%s WHERE u.idJoueur=%s'''
     mycursor.execute(sql, (pseudo,email,mdp,id,))
     get_db().commit()
     return redirect('/player/index')

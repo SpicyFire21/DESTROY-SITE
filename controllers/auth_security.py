@@ -21,8 +21,12 @@ def auth_login_post():
     mycursor = get_db().cursor()
     login = request.form.get('login')
     password = request.form.get('password')
+
+    fonction = request.form.get('fonction', '')
+    print('login', login)
+    print('fonction', fonction)
     # tuple_select = (login,)
-    sql = " SELECT * FROM joueurs WHERE login = %s; "
+    sql = " SELECT * FROM utilisateur WHERE login = %s; "
     retour = mycursor.execute(sql, (login,))
     user = mycursor.fetchone()
     if user:
@@ -32,9 +36,10 @@ def auth_login_post():
             flash(u'Vérifier votre mot de passe et essayer encore.', 'alert-warning')
             return redirect('/login')
         else:
+            user['fonction'] = fonction
             session['login'] = user['login']
             session['fonction'] = user['fonction']
-            session['id_user'] = user['idJoueur']
+            session['id_user'] = user['idUtilisateur']
             print("GG")
             if user['fonction'] == 'admin':
                 return redirect('/admin/index')
@@ -60,7 +65,7 @@ def auth_signup_post():
     email = request.form.get('email')
     password = request.form.get('password')
     tuple_select = (login, email,)
-    sql = " SELECT * FROM joueurs WHERE login = %s AND email = %s; "
+    sql = " SELECT * FROM utilisateur WHERE login = %s AND email = %s; "
     retour = mycursor.execute(sql, tuple_select)
     user = mycursor.fetchone()
     if user:
@@ -69,8 +74,8 @@ def auth_signup_post():
 
     # ajouter un nouveau user
     password = generate_password_hash(password, method = 'pbkdf2:sha256')
-    tuple_insert = (pseudo, login, email, password, 'player')  # changer player par visitor
-    sql = """  INSERT INTO joueurs (pseudo,login,email, mdp,fonction) VALUES (%s, %s, %s, %s, %s);  """
+    tuple_insert = (pseudo, login, email, password, 'visitor',)  # changer player par visitor
+    sql = """  INSERT INTO utilisateur (nomUtilisateur,login,email, mdp,fonction) VALUES (%s, %s, %s, %s, %s);  """
     mycursor.execute(sql, tuple_insert)
     print(tuple_insert)
     get_db().commit()
@@ -84,7 +89,7 @@ def auth_signup_post():
     session.pop('id_user', None)
     session['login'] = login
     session['fonction'] = 'player'
-    session['idJoueur'] = id_user
+    session['id_user'] = id_user
     return redirect('/')
 
 

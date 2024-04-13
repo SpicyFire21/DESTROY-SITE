@@ -23,7 +23,7 @@ def player_compo_show():
     mycursor.execute(sql_map)
     maps = mycursor.fetchall()
 
-    sql_agent = '''SELECT * FROM agent ORDER BY nomAgent ASC;'''
+    sql_agent = '''SELECT * FROM agent ORDER BY idAgent ASC, nomAgent ASC;'''
     mycursor.execute(sql_agent)
     agents = mycursor.fetchall()
 
