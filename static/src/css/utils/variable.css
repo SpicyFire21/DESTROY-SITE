@@ -5,6 +5,9 @@
     --white:#FEE8DA;
     --lightbeige:#D9C6B0;
     --lightgray:#EBEBEB;
-    --green:#009402;
-    --blue:#0070B0;
+    --green: #00b402;
+    --blue: #0088e0;
+
+    --flash-edit: rgba(0, 255, 1, 0.25);
+    --flash-delete: rgba(255, 0, 0, 0.25);
 }

@@ -1,0 +1,44 @@
+{% include 'visitor/visitor_layout.html' %}
+<body>
+<table class="visitor-player">
+
+  <caption>
+    Tableau de tous les joueurs de DESTROY ACADEMY
+  </caption>
+
+  <thead>
+    <tr>
+        <th scope="col">Pseudo</th>
+        <th scope="col">Role</th>
+
+        <th scope="col">Connecté</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    {% if players | length >= 1 %}
+        {% for ligne in players %}
+
+           <tr>
+                  <td>{{ ligne.pseudo }}</td>
+                  <td>{{ ligne.libelle }}</td>
+
+                  <td>X</td>
+           </tr>
+
+        {% endfor %}
+    {% else %}
+            <tr>
+                  <td>
+                      pas de joueurs :C
+                  </td>
+           </tr>
+    {% endif %}
+
+
+  </tbody>
+
+  
+</table>
+</body>

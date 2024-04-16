@@ -1,0 +1,11 @@
+.edited{
+    background-color: var(--flash-edit) ;
+    padding: 5px;
+    margin : 5px;
+}
+
+.deleted{
+    background-color: var(--flash-delete);
+    padding: 5px;
+    margin : 5px;
+}

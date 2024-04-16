@@ -1,0 +1,13 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<form action="/admin/maps_edit" method="POST">
+    <fieldset>
+        <legend>Modifier une Map :</legend>
+        <input type="hidden" value="{{map.idMap}}" name="id">
+        <input type="hidden" value="{{map.libelle}}" name="hiddenname">
+        <label for="nom"> Nom :</label>
+        <input type="text" value="{{map.libelle}}" id="nom" name="libelle">
+        <button type="submit">VALIDER</button>
+    </fieldset>
+</form>
+</body>

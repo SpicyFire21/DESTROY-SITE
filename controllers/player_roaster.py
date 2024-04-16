@@ -16,18 +16,29 @@ def player_roaster_show():
     mycursor = get_db().cursor()
     sql = '''SELECT * FROM utilisateur u
     join joueurs j on u.idJoueur = j.idJoueur
+    join role r on j.idRole = r.idRole
     where u.fonction like 'player';'''
     mycursor.execute(sql)
     roaster = mycursor.fetchall()
     nbr_joueurs = len(roaster)
     print('roaster :',roaster)
+
+    # connecté en tant que
+    id_user = session['id_user']
+    sql_ps = '''SELECT * FROM utilisateur u 
+            join joueurs j on u.idJoueur = j.idJoueur
+            where u.idJoueur=%s;'''
+    mycursor.execute(sql_ps, (id_user,))
+    playersession = mycursor.fetchone()
+
     get_db().commit()
     return render_template('player/player_roaster.html',
                            roaster = roaster,
-                           nbr_joueurs = nbr_joueurs)
+                           nbr_joueurs = nbr_joueurs,
+                           playersession = playersession)
 
 
-@player_roaster.route('/editaccount', methods =['GET'])
+@player_roaster.route('/editaccount_player', methods =['GET'])
 def editaccount():
     mycursor = get_db().cursor()
     id_user = session['id_user']
@@ -37,10 +48,19 @@ def editaccount():
     mycursor.execute(sql_all,(id_user,))
     compte = mycursor.fetchone()
     print(compte)
-    get_db().commit()
-    return render_template('player/player_profile.html', compte = compte)
 
-@player_roaster.route('/editaccount', methods =['POST'])
+    # connecté en tant que
+    id_user = session['id_user']
+    sql_ps = '''SELECT * FROM utilisateur u 
+                join joueurs j on u.idJoueur = j.idJoueur
+                where u.idJoueur=%s;'''
+    mycursor.execute(sql_ps, (id_user,))
+    playersession = mycursor.fetchone()
+
+    get_db().commit()
+    return render_template('player/player_profile.html', compte = compte, playersession = playersession )
+
+@player_roaster.route('/editaccount_player', methods =['POST'])
 def valid_editaccount():
     mycursor = get_db().cursor()
     id = request.form.get('id')

@@ -26,6 +26,16 @@ td {
 
 td,th {
     padding: 10px;
+    text-align: center;
+}
+
+.actions {
+    text-align: left;
+}
+
+.checkbox {
+    width: 100%;
+    transform: scale(1.7);
 }
 
 .form-edit fieldset{
@@ -51,22 +61,48 @@ td,th {
     align-items: stretch;
     gap: 10px;
     width: fit-content;
-    margin: 10px auto;
+    margin: auto 50px;
 }
 .form-edit-compo select {
     width: 100%;
 }
 
-.delete-compo {
+.delete,.remove-player {
     border: solid 2px var(--black);
     background-color: var(--lightred);
     padding: 5px;
     border-radius: 10px;
 }
 
-.roaster-body {
+.edit {
+    border: solid 2px var(--black);
+    background-color: var(--green);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.add-admin {
+    border: solid 2px var(--black);
+    background-color: var(--lightred);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.add-player {
+    border: solid 2px var(--black);
+    background-color: var(--blue);
+    padding: 5px;
+    border-radius: 10px;
+}
+
+.roaster-body,.admin-map-agent {
     display: flex;
     flex-direction: row;
+    align-items: flex-start;
+}
+
+.table-map,.table-agent {
+    margin: 10px auto;
 }
 
 .custom-file-upload {
@@ -75,4 +111,15 @@ td,th {
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
+}
+
+.player-compo {
+    display: flex;
+    flex-direction: row;
+        align-items: center;
+
+}
+
+.player-strats aside {
+    width: fit-content;
 }

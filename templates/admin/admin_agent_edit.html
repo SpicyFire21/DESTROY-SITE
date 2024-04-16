@@ -1,0 +1,13 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<form action="/admin/agents_edit" method="POST">
+    <fieldset>
+        <legend>Modifier un Agent :</legend>
+        <input type="hidden" value="{{agent.idAgent}}" name="id">
+        <input type="hidden" value="{{agent.nomAgent}}" name="hiddenname">
+        <label for="nom"> Nom :</label>
+        <input type="text" value="{{agent.nomAgent}}" id="nom" name="nomAgent">
+        <button type="submit">VALIDER</button>
+    </fieldset>
+</form>
+</body>

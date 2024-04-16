@@ -1,0 +1,62 @@
+{% include 'admin/admin_layout.html' %}
+
+<body>
+<table>
+
+  <caption>
+    Tableau des Joueurs
+  </caption>
+
+  <thead>
+    <tr>
+        <th>ID UTILISATEUR</th>
+        <th>ID JOUEUR</th>
+        <th>PSEUDO</th>
+        <th>TITULAIRE</th>
+        <th>ROLE</th>
+        <th>CONNECTÉ</th>
+        <th>OPÉRATIONS</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for player in players %}
+<tr>
+    <td>{{ player.idUtilisateur }} <em>({{ player.nomUtilisateur }})</em></td>
+    <td>{{ player.idJoueur }}</td>
+    <td>{{ player.pseudo }}</td>
+
+    <td>
+        {% if player.titulaire == 1 %}
+            {% set titu = 'OFFICIAL' %}
+        {% else %}
+            {% set titu = 'BENCH' %}
+        {% endif %}
+        <em><b>{{titu}}</b></em>
+    </td>
+
+    <td>{{ player.libelle }}</td>
+    <td>
+    {% if player.connected == 1 %}
+            {% set etat = 'ONLINE' %}
+        {% else %}
+            {% set etat = 'OFFLINE' %}
+        {% endif %}
+        <em><b>{{etat}}</b></em>
+    </td>
+    <td>
+        <a href="/admin/player_edit/{{player.idJoueur}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
+        <a href="/admin/player_delete/{{player.idJoueur}}" class="remove-player"><i class="fa-solid fa-user-minus" style="color: #000000;"></i></a>
+    </td>
+
+</tr>
+{% endfor %}
+
+
+
+
+  </tbody>
+
+
+</table>
+</body>

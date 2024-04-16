@@ -17,19 +17,21 @@
 
     <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
     <div class="form-input">
-<!--        <div class="input1">-->
-            <label for="inputlogin">Pseudo : </label>
+        <div class="input1">
+            <label for="inputlogin">Pseudo :</label>
             <input type="text" value="" name="login" id="inputlogin" class="form-control" required autofocus placeholder="Login" size="20">
-<!--        </div>-->
-<!--        <div class="input2">-->
-            <label for="inputPassword">Mot de passe : </label>
+        </div>
+        <div class="input2">
+            <label for="inputPassword">Mot de passe :</label>
             <input type="password" name="password" id="inputPassword" class="form-control" required  placeholder="Votre mot de passe" size="20">
-<!--        </div>-->
-            <div>
+        </div>
+            <div class="radio">
                 <label for="visitor">Visiteur</label>
                 <input type="radio" id="visitor" name="fonction" value="visitor" required>
+                <br>
                 <label for="player">Joueur</label>
                 <input type="radio" id="player" name="fonction" value="player" required>
+                <br>
                 <label for="admin">Admin</label>
                 <input type="radio" id="admin" name="fonction" value="admin" required>
             </div>

@@ -1,13 +1,15 @@
 <nav>
     <div class="nav-left">
         <h2>DESTROY ACADEMY</h2>
+        <a href="/player/index"><i class="fa-solid fa-house" style="color: #000000;"></i></a>
         <a href="/roaster_show">Roaster</a>
         <a href="/horaire_show">Horaire</a>
         <a href="/compo_show">Compo</a>
         <a href="/strats_show">Stratégies</a>
     </div>
     <div class="nav-right">
-        <a href="/editaccount">Modifier</a>
+        <p><em>connecté en tant que</em> <b class="b-player">{{playersession.pseudo}}</b></p>
+        <a href="/editaccount_player">Modifier</a>
         <a href="/logout">Déconnexion</a>
     </div>
 </nav>

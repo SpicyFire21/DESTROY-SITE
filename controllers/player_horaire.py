@@ -13,4 +13,21 @@ player_horaire = Blueprint('player_horaire', __name__,
 
 @player_horaire.route('/horaire_show')
 def player_horaire_show():
-    return render_template('player/player_horaire.html')
+    mycursor = get_db().cursor()
+
+    sql_jour ='''SELECT * FROM jour;'''
+    mycursor.execute(sql_jour)
+    jours = mycursor.fetchall()
+    sql_heure = '''SELECT * FROM heure;'''
+    mycursor.execute(sql_heure)
+    heures = mycursor.fetchall()
+
+    # connecté en tant que
+    id_user = session['id_user']
+    sql_ps = '''SELECT * FROM utilisateur u 
+                join joueurs j on u.idJoueur = j.idJoueur
+                where u.idJoueur=%s;'''
+    mycursor.execute(sql_ps, (id_user,))
+    playersession = mycursor.fetchone()
+
+    return render_template('player/player_horaire.html', playersession = playersession, jours = jours , heures = heures)

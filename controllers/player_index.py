@@ -18,8 +18,18 @@ def player_show():
     mycursor.execute(sql, (id_user,))
     player = mycursor.fetchone()
     print(player)
+
+    # connecté en tant que
+    id_user = session['id_user']
+    sql_ps = '''SELECT * FROM utilisateur u 
+        join joueurs j on u.idJoueur = j.idJoueur
+        where u.idJoueur=%s;'''
+    mycursor.execute(sql_ps, (id_user,))
+    playersession = mycursor.fetchone()
+
+
     if player:
-        return render_template('player/index.html', player = player)
+        return render_template('player/index.html', player = player, playersession = playersession)
     else:
         flash(u'Vous n\'avez pas les droits pour être inscrit en tant que Joueur ou votre compte n\'existe pas.', 'alert-warning')
         return redirect('/login')

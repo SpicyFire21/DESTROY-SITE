@@ -20,9 +20,18 @@ def admin_show():
     mycursor.execute(sql, (id_user,))
     staff = mycursor.fetchone()
     print('staff', staff)
+
+    # connecté en tant que
+    id_user = session['id_user']
+    sql_ps = '''SELECT * FROM utilisateur u 
+            join admin a on u.idAdmin = a.idAdmin
+            where u.idJoueur=%s;'''
+    mycursor.execute(sql_ps, (id_user,))
+    adminsession = mycursor.fetchone()
+
     get_db().commit()
     if staff:
-        return render_template('admin/index.html', staff = staff)
+        return render_template('admin/index.html', staff = staff,  adminsession =adminsession)
     else :
         flash(u'Vous n\'avez pas les droits pour être inscrit en tant qu\' Admin ou votre compte n\'existe pas.', 'alert-warning')
         return redirect('/login')

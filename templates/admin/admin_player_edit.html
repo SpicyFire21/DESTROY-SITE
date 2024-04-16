@@ -1,0 +1,29 @@
+{% include 'admin/admin_layout.html' %}
+<form method="post" action="/admin/player_edit">
+    <fieldset>
+        <legend>
+            Modifier un Joueur
+        </legend>
+        <input type="hidden" value="{{player.idJoueur}}" name="id">
+        <input type="text" value="{{player.pseudo}}" name="pseudo">
+        <input type="checkbox" value="1"
+        {% if player.titulaire == 1 %}
+               checked
+               {% endif %}
+         name="titulaire" >
+
+
+        <select name="role">
+            {% for item in roles %}
+            <option id="{{item.idRole}}" value="{{item.idRole}}"
+            {% if item.idRole == player.idRole %}
+                    selected
+                    {% endif %}
+
+            >{{item.libelle}}</option>
+            {% endfor %}
+
+        </select>
+        <button type="submit">MODIFIER</button>
+    </fieldset>
+</form>

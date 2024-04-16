@@ -1,6 +1,6 @@
 {% include 'player/player_layout.html' %}
 <body>
-<main>
+<main class="player-compo">
 <table>
 
   <caption>
@@ -29,7 +29,7 @@
         {% endfor %}
         </td>
     {% endfor %}
-    <td><a href="/delete_row/{{map.idMap}}" class="delete-compo"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></td>
+    <td><a href="/delete_row/{{map.idMap}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></td>
 </tr>
 {% endfor %}
 
@@ -50,7 +50,7 @@
   <tr>
       <th></th>
       {% for joueur in titulaire %}
-        <th scope="row" ><a href="/delete_column/{{joueur.idJoueur}}" class="delete-compo"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></th>
+        <th scope="row" ><a href="/delete_column/{{joueur.idJoueur}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></th>
       {% endfor %}
 
   </tr>

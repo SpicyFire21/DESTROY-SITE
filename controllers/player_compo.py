@@ -42,12 +42,22 @@ def player_compo_show():
     # Exécution de la requête SQL en passant les tuples de valeurs
     mycursor.execute(sql_compo, (tuple(selected_map_id), tuple(selected_joueur_id), tuple(selected_agent_id)))
     compo = mycursor.fetchall()
+    sql_delete='''DELETE FROM compo WHERE idAgent=1'''
+    mycursor.execute(sql_delete)
+
+    # connecté en tant que
+    id_user = session['id_user']
+    sql_ps = '''SELECT * FROM utilisateur u 
+            join joueurs j on u.idJoueur = j.idJoueur
+            where u.idJoueur=%s;'''
+    mycursor.execute(sql_ps, (id_user,))
+    playersession = mycursor.fetchone()
 
     print('compo : ', compo)
 
     get_db().commit()
     return render_template('player/player_compo.html', titulaire=titulaire, maps=maps, agents=agents,
-                           compo=compo)
+                           compo=compo, playersession = playersession)
 
 
 

@@ -1,0 +1,50 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<table>
+
+  <caption>
+    Tableau des Utilisateurs
+  </caption>
+
+  <thead>
+    <tr>
+        <th>ID UTILISATEUR</th>
+        <th>NOM</th>
+        <th>LOGIN</th>
+        <th>EMAIL</th>
+
+
+
+        <th>OPÉRATIONS</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for user in users %}
+<tr>
+    <td>{{ user.idUtilisateur }}</td>
+    <td>{{ user.nomUtilisateur }}</td>
+    <td>{{ user.login }}</td>
+    <td>{{ user.email }}</td>
+    <td class="actions">
+        <a href="/admin/users_edit/{{user.idUtilisateur}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
+        <a href="/admin/users_delete/{{user.idUtilisateur}}" class="delete"><i class="fa-solid fa-trash" style="color: #000000;"></i></a>
+        {% if user.idJoueur is none %}
+        <a href="/admin/users_add_player/{{user.idUtilisateur}}" class="add-player"><i class="fa-solid fa-gamepad fa-beat" style="color: #000000;"></i></a>
+        {% endif %}
+        {% if user.idAdmin is none %}
+        <a href="/admin/users_add_admin/{{user.idUtilisateur}}" class="add-admin"><i class="fa-solid fa-screwdriver-wrench" style="color: #000000;"></i></a>
+        {% endif %}
+    </td>
+
+</tr>
+{% endfor %}
+
+
+
+
+  </tbody>
+
+
+</table>
+</body>

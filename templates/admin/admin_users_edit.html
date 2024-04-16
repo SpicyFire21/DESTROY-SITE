@@ -1,0 +1,23 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<form action="/admin/users_edit" method="POST">
+    <fieldset>
+        <legend>Modifier un Utilisateur :</legend>
+        <input type="hidden" value="{{user.idUtilisateur}}" name="id">
+
+        <label for="nom"> Nom :</label>
+        <input type="text" value="{{user.nomUtilisateur}}" id="nom" name="nom">
+
+        <label for="login"> Login :</label>
+        <input type="text" value="{{user.login}}" id="login" name="login">
+
+        <label for="email"> Email :</label>
+        <input type="email" value="{{user.email}}" id="email" name="email">
+
+        <label for="mdp">Mot de Passe :</label>
+        <input type="text" value="" id="mdp" name="mdp">
+
+        <button type="submit">VALIDER</button>
+    </fieldset>
+</form>
+</body>

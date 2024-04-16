@@ -1,11 +1,14 @@
 <nav>
     <div class="nav-left">
         <h2>DESTROY ACADEMY</h2>
-        <a href="">Utilisateurs</a>
-        <a href="">Joueurs</a>
-        <a href="">Maps et Agents</a>
+        <a href="/admin/inde"><i class="fa-solid fa-house" style="color: #000000;"></i></a>
+        <a href="/admin/users_show">Utilisateurs</a>
+        <a href="/admin/players_show">Joueurs</a>
+        <a href="/admin/mapsagents_show">Maps et Agents</a>
     </div>
     <div class="nav-right">
+        <p><em>connecté en tant que</em> <b class="b-admin">{{adminsession.nomAdmin}}</b></p>
+        <a href="/editaccount_admin">Modifier</a>
         <a href="/logout">Déconnexion</a>
     </div>
 </nav>

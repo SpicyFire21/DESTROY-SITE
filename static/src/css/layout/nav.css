@@ -39,3 +39,11 @@ nav a:hover {
     display: flex;
     flex-direction: row ;
 }
+
+.b-admin {
+    color: var(--lightred);
+}
+
+.b-player {
+    color: var(--blue);
+}

@@ -1,1 +1,55 @@
 {% include 'player/player_layout.html' %}
+<main>
+
+<table>
+
+  <caption>
+    Horaire perso
+  </caption>
+
+  <thead>
+    <tr>
+        <th></th>
+        {% for jour in jours %}
+            <th scope="col">{{jour.nomJour}}</th>
+        {% endfor %}
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for heure in heures %}
+<tr>
+    <th>{{ heure.idHeure }}h</th>
+    {% for jour in jours %}
+        <td>
+<!--        {% for compo_entry in compo %}-->
+<!--            {% if map.idMap == compo_entry.idMap and joueur.idJoueur == compo_entry.idJoueur and compo_entry.nomAgent != 'None' %}-->
+<!--                {{ compo_entry.nomAgent }}-->
+<!--            {% endif %}-->
+<!--        {% endfor %}-->
+            <input type="checkbox" class="checkbox" id="">
+        </td>
+    {% endfor %}
+
+</tr>
+{% endfor %}
+
+
+
+
+  </tbody>
+
+  <tfoot>
+
+  <tr>
+      <th></th>
+      {% for jour in jours %}
+        <th scope="row" >D</th>
+      {% endfor %}
+
+  </tr>
+  </tfoot>
+</table>
+
+
+</main>

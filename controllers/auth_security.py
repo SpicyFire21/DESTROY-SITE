@@ -48,7 +48,7 @@ def auth_login_post():
             else:
                 return redirect('/visitor/index')
     else:
-        flash(u'Vérifier votre login et essayer encore.', 'alert-warning')
+        flash(u'Vérifier votre login et essayer encore ou vous n\'avez pas de compte.', 'alert-warning')
         return redirect('/login')
 
 
