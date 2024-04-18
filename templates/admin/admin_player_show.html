@@ -22,7 +22,7 @@
   <tbody>
   {% for player in players %}
 <tr>
-    <td>{{ player.idUtilisateur }} <em>({{ player.nomUtilisateur }})</em></td>
+    <td>{{ player.idUtilisateur }} (<em>{{ player.nomUtilisateur }}</em>)</td>
     <td>{{ player.idJoueur }}</td>
     <td>{{ player.pseudo }}</td>
 
@@ -39,10 +39,12 @@
     <td>
     {% if player.connected == 1 %}
             {% set etat = 'ONLINE' %}
+            <b class="online">{{etat}}</b>
         {% else %}
             {% set etat = 'OFFLINE' %}
+            <em class="offline"><b>{{etat}}</b></em>
         {% endif %}
-        <em><b>{{etat}}</b></em>
+
     </td>
     <td>
         <a href="/admin/player_edit/{{player.idJoueur}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>

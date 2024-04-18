@@ -25,10 +25,12 @@ def auth_login_post():
     fonction = request.form.get('fonction', '')
     print('login', login)
     print('fonction', fonction)
+
     # tuple_select = (login,)
     sql = " SELECT * FROM utilisateur WHERE login = %s; "
     retour = mycursor.execute(sql, (login,))
     user = mycursor.fetchone()
+    print('user', user)
     if user:
         mdp_ok = check_password_hash(user['mdp'], password)
 
@@ -40,10 +42,17 @@ def auth_login_post():
             session['login'] = user['login']
             session['fonction'] = user['fonction']
             session['id_user'] = user['idUtilisateur']
+            id = user['idUtilisateur']
+
+            sql_c = '''UPDATE utilisateur u set u.connected=1, u.fonction=%s where idUtilisateur=%s;'''
+            mycursor.execute(sql_c,(fonction,id,))
+
+
+
             print("GG")
-            if user['fonction'] == 'admin':
+            if session['fonction'] == 'ADMIN':
                 return redirect('/admin/index')
-            elif user['fonction'] == 'player':
+            elif session['fonction'] == 'PLAYER':
                 return redirect('/player/index')
             else:
                 return redirect('/visitor/index')
@@ -95,6 +104,13 @@ def auth_signup_post():
 
 @auth_security.route('/logout')
 def auth_logout():
+    mycursor = get_db().cursor()
+
+
+    id = session['id_user']
+
+    sql_c = '''UPDATE utilisateur u set u.connected=0 where idUtilisateur=%s;'''
+    mycursor.execute(sql_c, (id,))
     session.pop('login', None)
     session.pop('role', None)
     session.pop('id_user', None)

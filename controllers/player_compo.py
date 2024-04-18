@@ -6,6 +6,7 @@ from flask import Flask, request, render_template, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from connection_bdd import get_db
+from controllers.admin_map_agent import pyfetchMap, pyfetchAgent
 
 player_compo = Blueprint('player_compo', __name__,
                          template_folder = 'templates')
@@ -15,6 +16,7 @@ player_compo = Blueprint('player_compo', __name__,
 def player_compo_show():
     mycursor = get_db().cursor()
 
+
     sql_joueurs = '''SELECT * FROM joueurs LIMIT 5 ;'''
     mycursor.execute(sql_joueurs)
     titulaire = mycursor.fetchall()
@@ -23,9 +25,21 @@ def player_compo_show():
     mycursor.execute(sql_map)
     maps = mycursor.fetchall()
 
-    sql_agent = '''SELECT * FROM agent ORDER BY idAgent ASC, nomAgent ASC;'''
+    if not maps:
+        print("maps")
+        pyfetchMap()
+        mycursor.execute(sql_map)
+        maps = mycursor.fetchall()
+
+    sql_agent = '''SELECT * FROM agent where nomAgent not like 'None' ORDER BY idAgent ASC, nomAgent ASC;'''
     mycursor.execute(sql_agent)
     agents = mycursor.fetchall()
+
+    if not agents:
+        print("agents")
+        pyfetchAgent()
+        mycursor.execute(sql_agent)
+        agents = mycursor.fetchall()
 
     # Utilisation des valeurs récupérées dans les requêtes précédentes
     selected_map_id = [item['idMap'] for item in maps]

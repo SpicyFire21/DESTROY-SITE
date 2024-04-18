@@ -1,0 +1,19 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<form method="post" action="/admin/pracc_edit">
+    <fieldset>
+        <legend>
+            MODIFIER UNE PRACC
+        </legend>
+        <input type="hidden" value="{{pracc.idPracc}}" name="id">
+
+        <label for="name">Nom de la Pracc :</label>
+        <input type="text" name="nom" id="name" value="{{pracc.nomPracc}}">
+
+        <label for="date">Date de la Pracc :</label>
+        <input type="date" name="date" id="date" value="{{pracc.date_pracc}}">
+
+        <button type="submit">MODIFIER</button>
+    </fieldset>
+</form>
+</body>

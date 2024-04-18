@@ -2,3 +2,8 @@
     aspect-ratio: 1/1;
     width: 25vw;
 }
+
+.agent-icones {
+    aspect-ratio: 256/256;
+    width: 25%;
+}

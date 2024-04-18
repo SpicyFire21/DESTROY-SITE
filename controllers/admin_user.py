@@ -70,8 +70,23 @@ def valid_admin_users_edit():
 @admin_user.route('/admin/users_delete/<id>', methods = ['GET'])
 def admin_users_delete(id):
     mycursor = get_db().cursor()
-    sql = '''DELETE FROM utilisateur where idUtilisateur=%s;'''
-    mycursor.execute(sql, (id,))
+
+    sql = '''SELECT idUtilisateur,idJoueur,idAdmin from utilisateur where idUtilisateur =%s;'''
+    mycursor.execute(sql,(id,))
+    jsonreturn = mycursor.fetchone()
+    id_j = jsonreturn['idJoueur']
+    id_a = jsonreturn['idAdmin']
+
+    sql3 = '''DELETE FROM admin where idAdmin=%s;'''
+    mycursor.execute(sql3, (id_a,))
+
+    sql2 = '''DELETE FROM joueurs where idJoueur=%s;'''
+    mycursor.execute(sql2, (id_j,))
+
+    sql1 = '''DELETE FROM utilisateur where idUtilisateur=%s;'''
+    mycursor.execute(sql1, (id,))
+
+
     get_db().commit()
     return redirect('/admin/users_show')
 
@@ -85,7 +100,7 @@ def admin_users_add_player(id):
     jsonreturn = mycursor.fetchone()
     pseudo = jsonreturn['nomUtilisateur']
     titulaire = 0
-    print(jsonreturn)
+
     role = 8
     sql_insert = '''INSERT INTO joueurs (pseudo, titulaire,idRole) VALUES (%s,%s,%s);'''
     mycursor.execute(sql_insert, (pseudo, titulaire,role))
@@ -93,13 +108,15 @@ def admin_users_add_player(id):
     sql_id_select = '''SELECT max(idJoueur) from joueurs;'''
     mycursor.execute(sql_id_select)
     id_player_js = mycursor.fetchone()
-    print(id_player_js)
+
     id_player = id_player_js['max(idJoueur)']
 
     sql_id_add = '''UPDATE utilisateur set idJoueur=%s where idUtilisateur=%s;'''
     mycursor.execute(sql_id_add, (id_player, id,))
 
     get_db().commit()
+    message = 'Utilisateur promu Joueur ! | ' + pseudo
+    flash(message, 'add')
     return redirect('/admin/users_show')
 
 @admin_user.route('/admin/users_add_admin/<id>', methods = ['GET'])
@@ -111,19 +128,19 @@ def admin_users_add_admin(id):
     jsonreturn = mycursor.fetchone()
     pseudo = jsonreturn['nomUtilisateur']
 
-    print(jsonreturn)
-
     sql_insert = '''INSERT INTO admin (nomAdmin) VALUES (%s);'''
     mycursor.execute(sql_insert, (pseudo,))
 
     sql_id_select = '''SELECT max(idAdmin) from admin;'''
     mycursor.execute(sql_id_select)
     id_player_js = mycursor.fetchone()
-    print(id_player_js)
+
     id_player = id_player_js['max(idAdmin)']
 
     sql_id_add = '''UPDATE utilisateur set idAdmin=%s where idUtilisateur=%s;'''
     mycursor.execute(sql_id_add, (id_player, id,))
 
     get_db().commit()
+    message = 'Utilisateur promu Administrateur ! | ' + pseudo
+    flash(message, 'add')
     return redirect('/admin/users_show')

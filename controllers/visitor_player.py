@@ -11,13 +11,12 @@ visitor_player = Blueprint('visitor_player', __name__,
                            template_folder = 'templates')
 
 
-@visitor_player.route('/visitor_player_show')
+@visitor_player.route('/visitor/player_show')
 def visitor_player_show():
     mycursor = get_db().cursor()
     sql = '''SELECT * FROM utilisateur u
     join joueurs j on u.idJoueur = j.idJoueur
-    join role r on j.idRole = r.idRole
-    where u.fonction like 'player';'''
+    join role r on j.idRole = r.idRole;'''
     mycursor.execute(sql)
     players = mycursor.fetchall()
 

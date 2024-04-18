@@ -1,4 +1,4 @@
-{% extends 'auth/layout.html' %}
+{% extends 'nologin/nologin_layout.html' %}
 
 {% block body %}
 <form method="post" action="/signup" >
@@ -18,7 +18,7 @@
     <input type="text" name="login" class="form-control" value="" required autofocus  placeholder="login">
 
     <label for="email">Email</label>
-    <input type="text" name="email"  id="email" class="form-control" value="" required  placeholder="Email"  >
+    <input type="email" name="email"  id="email" class="form-control" value="" required  placeholder="Email"  >
 
     <label for="password">Mot de passe</label>
     <input type="password" name="password" id="password" class="form-control" value="" required  placeholder="Password">

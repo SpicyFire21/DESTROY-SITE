@@ -16,9 +16,15 @@ def visitor_show():
     sql = '''SELECT * FROM utilisateur u where u.idUtilisateur = %s;'''
     mycursor.execute(sql, (id_user,))
     user = mycursor.fetchone()
+    # connecté en tant que
+    id_user = session['id_user']
+    sql_ps = '''SELECT * FROM utilisateur u
+                where u.idUtilisateur=%s;'''
+    mycursor.execute(sql_ps, (id_user,))
+    visitorsession = mycursor.fetchone()
     get_db().commit()
     if user:
-        return render_template('visitor/index.html', user = user)
+        return render_template('visitor/index.html', user = user,visitorsession=visitorsession)
     else:
         flash(u'Votre compte n\'existe pas, veuillez en créer un.', 'alert-warning')
         return redirect('/login')

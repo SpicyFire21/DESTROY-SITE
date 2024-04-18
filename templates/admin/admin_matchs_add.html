@@ -1,0 +1,17 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<form method="post" action="/admin/match_add">
+    <fieldset>
+        <legend>
+            AJOUTER UN MATCH
+        </legend>
+        <label for="name">Nom du Match :</label>
+        <input type="text" name="nom" id="name">
+
+        <label for="date">Date du Match :</label>
+        <input type="date" name="date" id="date">
+
+        <button type="submit">AJOUTER</button>
+    </fieldset>
+</form>
+</body>

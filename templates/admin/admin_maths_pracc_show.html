@@ -1,0 +1,109 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<main class="admin-games">
+<table>
+
+  <caption>
+    Tableau des Matchs
+  </caption>
+
+  <thead>
+    <tr>
+        <th colspan="30">AJOUTER
+            <a href="/admin/match_add">
+                <i class="fa-solid fa-circle-plus" style="color: #000000;"></i>
+            </a>
+        </th>
+    </tr>
+    <tr>
+        <th>ID MATCH</th>
+        <th>NOM</th>
+        <th>DATE MATCH</th>
+        <th>DATE AJOUT</th>
+        <th>OPÉRATIONS</th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+{% if matchs | length >= 1 %}
+  {% for match in matchs %}
+<tr>
+    <td>{{ match.idMatch }}</td>
+    <td>{{ match.nomMatch }}</td>
+    <td>{{ match.date_match }}</td>
+    <td>{{ match.date_ajout }}</td>
+    <td>
+        <a href="/admin/match_edit/{{match.idMatch}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
+        <a href="/admin/match_delete/{{match.idMatch}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a>
+    </td>
+
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+        <td COLSPAN="14">
+                      pas de match :C
+                  </td>
+</tr>
+{% endif %}
+
+  </tbody>
+
+
+</table>
+
+<table>
+
+  <caption>
+    Tableau des Pracc
+  </caption>
+
+  <thead>
+
+  <tr>
+        <th colspan="30">AJOUTER
+            <a href="/admin/pracc_add">
+                <i class="fa-solid fa-circle-plus" style="color: #000000;"></i>
+            </a>
+        </th>
+    </tr>
+    <tr>
+        <th>ID PRACC</th>
+        <th>NOM</th>
+        <th>DATE PRACC</th>
+        <th>DATE AJOUT</th>
+        <th>OPÉRATIONS</th>
+
+    </tr>
+  </thead>
+
+  <tbody>
+{% if pracc | length >= 1 %}
+  {% for item in pracc %}
+<tr>
+    <td>{{ item.idPracc }}</td>
+    <td>{{ item.nomPracc }}</td>
+    <td>{{ item.date_pracc }}</td>
+    <td>{{ item.date_ajout }}</td>
+    <td>
+        <a href="/admin/pracc_edit/{{item.idPracc}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
+        <a href="/admin/pracc_delete/{{item.idPracc}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a>
+    </td>
+
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+        <td COLSPAN="14">
+                      pas de pracc :C
+                  </td>
+</tr>
+{% endif %}
+
+  </tbody>
+
+
+</table>
+</main>
+</body>

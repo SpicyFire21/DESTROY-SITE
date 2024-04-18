@@ -58,31 +58,49 @@ def admin_player_edit(id):
 
 @admin_player.route('/admin/player_edit', methods = ['POST'])
 def valid_admin_player_edit():
+    global titu
     mycursor = get_db().cursor()
     id = request.form.get('id', '')
     pseudo = request.form.get('pseudo', '')
     titulaire = request.form.get('titulaire', '')
     role = request.form.get('role', '')
-
-    print(titulaire)
-
-    sql = '''UPDATE joueurs j 
+    sql1 = '''UPDATE joueurs j 
     join role r on j.idRole = r.idRole
     set j.pseudo=%s,j.titulaire=%s, j.idRole=%s where j.idJoueur=%s;'''
-    mycursor.execute(sql, (pseudo, titulaire, role, id,))
+    mycursor.execute(sql1, (pseudo, titulaire, role, id,))
     get_db().commit()
+
+    sql2 = '''SELECT * from role where idRole=%s;'''
+    mycursor.execute(sql2, (role,))
+    jsonreturn = mycursor.fetchone()
+    role = jsonreturn['libelle']
+    if titulaire == 1:
+        titu = "oui"
+    else :
+        titu = "non"
+
+    message = 'Joueur Modifié ! | pseudo : ' + pseudo + ' | Titulaire : ' + titu + ' | role : ' + role
+    flash(message, 'edited')
     return redirect('/admin/players_show')
 
 
 @admin_player.route('/admin/player_delete/<id>', methods = ['GET'])
 def admin_player_delete(id):
     mycursor = get_db().cursor()
+
+    sql = '''SELECT * FROM joueurs where idJoueur=%s;'''
+    mycursor.execute(sql, (id,))
+    jsonreturn = mycursor.fetchone()
+    name = jsonreturn['pseudo']
+
     sql1 = '''DELETE FROM joueurs where idJoueur=%s;'''
     mycursor.execute(sql1, (id,))
 
     sql2 = '''Update utilisateur set idJoueur=null where idJoueur=%s;'''
     mycursor.execute(sql2, (id,))
     get_db().commit()
+    message = 'Joueur Supprimé ! | ' + name
+    flash(message, 'deleted')
     return redirect('/admin/players_show')
 
 # @admin_player.route('/admin/admin_delete/<id>', methods = ['GET'])

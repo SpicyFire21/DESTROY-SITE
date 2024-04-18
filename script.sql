@@ -1,5 +1,6 @@
 SET sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));
 
+# drop pas dans l'ordre ...
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS joueurs;
 DROP TABLE IF EXISTS map;
@@ -10,6 +11,18 @@ DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS heure;
 DROP TABLE IF EXISTS jour;
 DROP TABLE IF EXISTS horaire;
+DROP TABLE IF EXISTS matchs;
+DROP TABLE IF EXISTS pracc;
+DROP TABLE IF EXISTS root;
+
+CREATE TABLE IF NOT EXISTS root(
+  idRoot INT not null auto_increment,
+  nomRoot VARCHAR(50) ,
+    mdp VARCHAR(255),
+    PRIMARY KEY (idRoot)
+);
+
+
 
 CREATE TABLE IF NOT EXISTS role(
    idRole INT NOT NULL AUTO_INCREMENT,
@@ -93,8 +106,38 @@ CREATE TABLE IF NOT EXISTS horaire(
    FOREIGN KEY(idHeure) REFERENCES Heure(idHeure)
 );
 
+CREATE TABLE IF NOT EXISTS matchs(
+    idMatch INT NOT NULL AUTO_INCREMENT,
+    nomMatch VARCHAR(50),
+    commentaire VARCHAR(255),
+    date_match DATE,
+    date_ajout DATETIME,
+    PRIMARY KEY (idMatch)
+);
+
+CREATE TABLE IF NOT EXISTS pracc(
+    idPracc INT NOT NULL AUTO_INCREMENT,
+    nomPracc VARCHAR(50),
+    commentaire VARCHAR(255),
+    date_pracc DATE,
+    date_ajout DATETIME,
+    PRIMARY KEY (idPracc)
+);
 
 
+INSERT INTO matchs (nomMatch, date_match, date_ajout) VALUES
+('Match1', '2024-04-01', NOW()),
+('Match2', '2024-04-05', NOW()),
+('Match3', '2024-04-10', NOW()),
+('Match4', '2024-04-15', NOW()),
+('Match5', '2024-04-20', NOW());
+
+INSERT INTO pracc (nomPracc, date_pracc, date_ajout) VALUES
+('Pracc1', '2024-04-02', NOW()),
+('Pracc2', '2024-04-06', NOW()),
+('Pracc3', '2024-04-11', NOW()),
+('Pracc4', '2024-04-16', NOW()),
+('Pracc5', '2024-04-21', NOW());
 
 
 INSERT INTO compo (idJoueur, idMap, idAgent) VALUES
@@ -116,49 +159,17 @@ INSERT INTO compo (idJoueur, idMap, idAgent) VALUES
 
 
 INSERT INTO agent (nomAgent) VALUES
-('None'),
-('Astra'),
-('Breach'),
-('Brimstone'),
-('Chamber'),
-('Clove'),
-('Cypher'),
-('Deadlock'),
-('Fade'),
-('Gekko'),
-('Harbor'),
-('Iso'),
-('Jett'),
-('KAY/O'),
-('Killjoy'),
-('Neon'),
-('Omen'),
-('Phoenix'),
-('Raze'),
-('Reyna'),
-('Skye'),
-('Sage'),
-('Sova'),
-('Viper'),
-('Yoru');
+('None');
 
-INSERT INTO map(idMap, libelle) VALUES
-(NULL,'Ascent'),
-(NULL,'Bind'),
-(NULL,'Breeze'),
-(NULL,'Icebox'),
-(NULL,'Lotus'),
-(NULL,'Split'),
-(NULL,'Sunset'),
-(NULL,'Fracture'),
-(NULL,'Haven');
+
+
 
 INSERT INTO utilisateur ( nomUtilisateur, login, email, mdp, fonction,connected ,idAdmin, idJoueur) VALUES
-( 'SpicyFire', 'SpicyFire', 'khnagui.adam@gmail.com', 'pbkdf2:sha256:600000$m3xBga3XDY6uJ1xN$643e2e8a715664cc946998a911ef5f448d26e042ff8a6915166b1faa2406e2e6', 'player',FALSE, 1, 1),
-( 'sPer', 'sPer', 'email@email.com', 'pbkdf2:sha256:600000$O9qKKhEFNyQ7hRuH$42c407dea492321a6fe1111c4ca3a8ddd32f5ac692ab9a6f1ea5560eacc74c33', 'player',FALSE, null, 2),
-( 'DracotiuM', 'DracotiuM', 'email@email.com', 'pbkdf2:sha256:600000$OOZasfGUuvZLLJwb$129b88a20f33102a30558f75adda1d2879003017d467a80a4a727d769b823e14', 'player',FALSE, 2, 3),
-( 'Diamond', 'Diamond', 'email@email.com', 'pbkdf2:sha256:600000$l87LCYNGvs52HS8M$4c02c55dec139ea7b32d98eec763f610846fd135e3f3b7c7c2d17201784f2993', 'player',FALSE, null, 4),
-( 'Zerios', 'Zerios', 'email@email.com', 'pbkdf2:sha256:600000$TGhqz3j9ggePkEcv$0b6c8570399d567daef07578bce853315c129610c77a975b851caacf07dfe59f', 'player',FALSE, null, 5);
+( 'SpicyFire', 'SpicyFire', 'khnagui.adam@gmail.com', 'pbkdf2:sha256:600000$m3xBga3XDY6uJ1xN$643e2e8a715664cc946998a911ef5f448d26e042ff8a6915166b1faa2406e2e6', 'PLAYER',FALSE, 1, 1),
+( 'sPer', 'sPer', 'email@email.com', 'pbkdf2:sha256:600000$O9qKKhEFNyQ7hRuH$42c407dea492321a6fe1111c4ca3a8ddd32f5ac692ab9a6f1ea5560eacc74c33', 'PLAYER',FALSE, null, 2),
+( 'DracotiuM', 'DracotiuM', 'email@email.com', 'pbkdf2:sha256:600000$OOZasfGUuvZLLJwb$129b88a20f33102a30558f75adda1d2879003017d467a80a4a727d769b823e14', 'PLAYER',FALSE, 2, 3),
+( 'Diamond', 'Diamond', 'email@email.com', 'pbkdf2:sha256:600000$l87LCYNGvs52HS8M$4c02c55dec139ea7b32d98eec763f610846fd135e3f3b7c7c2d17201784f2993', 'PLAYER',FALSE, null, 4),
+( 'Zerios', 'Zerios', 'email@email.com', 'pbkdf2:sha256:600000$TGhqz3j9ggePkEcv$0b6c8570399d567daef07578bce853315c129610c77a975b851caacf07dfe59f', 'PLAYER',FALSE, null, 5);
 
 INSERT INTO joueurs (pseudo, titulaire, idRole) VALUES
 ('SpicyFire', TRUE, 1),
@@ -167,15 +178,15 @@ INSERT INTO joueurs (pseudo, titulaire, idRole) VALUES
 ('Diamond', TRUE, 4),
 ('Zerios', TRUE, 2);
 
-INSERT INTO role(idRole, libelle) VALUES
-(1,'Duelliste'),
-(2,'Initiateur'),
-(3,'Flex'),
-(4,'Controlleur'),
-(5,'Sentinelle'),
-(6,'Remplaçant'),
-(7,'Coach'),
-(8,'Non défini');
+INSERT INTO role(libelle) VALUE
+('Duelliste'),
+('Initiateur'),
+('Flex'),
+('Controlleur'),
+('Sentinelle'),
+('Remplaçant'),
+('Coach'),
+('Non défini');
 
 INSERT INTO admin ( nomAdmin) VALUES
 ( 'Admin-SpicyFire'),
@@ -216,7 +227,7 @@ INSERT INTO heure (idHeure, heure) VALUES
 (23, FALSE),
 (24, FALSE);
 
-
+INSERT INTO root (nomRoot,mdp) values ('root1','pbkdf2:sha256:600000$m3xBga3XDY6uJ1xN$643e2e8a715664cc946998a911ef5f448d26e042ff8a6915166b1faa2406e2e6');
 
 # INSERT INTO joueurs (idJoueur, pseudo, login, email, mdp, fonction, idRole) VALUES
 # (1, 'SpicyFire', 'SpicyFire', 'khnagui.adam@gmail.com', 'pbkdf2:sha256:600000$m3xBga3XDY6uJ1xN$643e2e8a715664cc946998a911ef5f448d26e042ff8a6915166b1faa2406e2e6', 'player', 0),

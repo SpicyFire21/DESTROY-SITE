@@ -9,3 +9,9 @@
     padding: 5px;
     margin : 5px;
 }
+
+.add {
+    background-color: var(--flash-add);
+    padding: 5px;
+    margin : 5px;
+}

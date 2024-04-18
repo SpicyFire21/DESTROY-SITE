@@ -2,6 +2,8 @@
 # -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import Flask, request, render_template, redirect, abort, flash, session
+import pymysql
+import requests
 
 from connection_bdd import get_db
 
@@ -11,15 +13,29 @@ admin_map_agent = Blueprint('admin_map_agent', __name__,
 
 @admin_map_agent.route('/admin/mapsagents_show')
 def admin_maps_agents():
+
     mycursor = get_db().cursor()
 
-    sql = '''SELECT * FROM map;'''
-    mycursor.execute(sql)
+    sql1 = '''SELECT * FROM map order by libelle;'''
+    mycursor.execute(sql1)
     maps = mycursor.fetchall()
 
-    sql = '''SELECT * FROM agent;'''
-    mycursor.execute(sql)
+    if not maps:
+        print("maps")
+        pyfetchMap()
+        mycursor.execute(sql1)
+        maps = mycursor.fetchall()
+
+    sql2 = '''SELECT * FROM agent where nomAgent not like 'None' order by nomAgent ;'''
+    mycursor.execute(sql2)
     agents = mycursor.fetchall()
+
+    if not agents:
+        print("agents")
+        pyfetchAgent()
+        mycursor.execute(sql2)
+        agents = mycursor.fetchall()
+
 
     # connecté en tant que
     id_user = session['id_user']
@@ -31,6 +47,34 @@ def admin_maps_agents():
 
     get_db().commit()
     return render_template('admin/admin_map_agent_show.html', maps = maps, agents = agents, adminsession = adminsession)
+
+
+
+def pyfetchAgent():
+    response = requests.get('https://valorant-api.com/v1/agents')
+    res = response.json()
+    print('json', res)
+    mycursor = get_db().cursor()
+    insert_query = """INSERT INTO agent (nomAgent)VALUES (%s)"""
+    data = res['data']
+    for row in data:
+        if row['isPlayableCharacter']:
+            mycursor.execute(insert_query, (row['displayName'],))
+
+    return redirect('/admin/mapsagents_show')
+
+def pyfetchMap():
+    response = requests.get('https://valorant-api.com/v1/maps')
+    res = response.json()
+    print('json', res)
+    mycursor = get_db().cursor()
+    insert_query = """INSERT INTO map (libelle)VALUES (%s)"""
+    data = res['data']
+    for row in data:
+        if row['narrativeDescription']:
+            mycursor.execute(insert_query, (row['displayName'],))
+
+    return redirect('/admin/mapsagents_show')
 
 
 @admin_map_agent.route('/admin/maps_edit/<id>', methods = ['GET'])

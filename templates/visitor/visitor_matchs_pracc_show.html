@@ -1,0 +1,95 @@
+{% include 'visitor/visitor_layout.html' %}
+<body>
+<main class="visitor-games">
+<table>
+
+  <caption>
+    Tableau des Matchs
+  </caption>
+
+  <thead>
+
+    <tr>
+        <th>NOM</th>
+        <th>DATE MATCH</th>
+        <th>DATE AJOUT</th>
+<!--        <th>OPÉRATIONS</th>-->
+
+    </tr>
+  </thead>
+
+  <tbody>
+{% if matchs | length >= 1 %}
+  {% for match in matchs %}
+<tr>
+
+    <td>{{ match.nomMatch }}</td>
+    <td>{{ match.date_match }}</td>
+    <td>{{ match.date_ajout }}</td>
+<!--    <td>-->
+<!--        <a href="/visitor/match_edit/{{match.idMatch}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>-->
+<!--        <a href="/visitor/match_delete/{{match.idMatch}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a>-->
+<!--    </td>-->
+
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+        <td COLSPAN="14">
+                      pas de match :C
+                  </td>
+</tr>
+{% endif %}
+
+  </tbody>
+
+
+</table>
+
+<table>
+
+  <caption>
+    Tableau des Pracc
+  </caption>
+
+  <thead>
+
+    <tr>
+
+        <th>NOM</th>
+        <th>DATE PRACC</th>
+        <th>DATE AJOUT</th>
+<!--        <th>OPÉRATIONS</th>-->
+
+    </tr>
+  </thead>
+
+  <tbody>
+{% if pracc | length >= 1 %}
+  {% for item in pracc %}
+<tr>
+
+    <td>{{ item.nomPracc }}</td>
+    <td>{{ item.date_pracc }}</td>
+    <td>{{ item.date_ajout }}</td>
+<!--    <td>-->
+<!--        <a href="/visitor/pracc_edit/{{item.idPracc}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>-->
+<!--        <a href="/visitor/pracc_delete/{{item.idPracc}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a>-->
+<!--    </td>-->
+
+</tr>
+{% endfor %}
+{% else %}
+<tr>
+        <td COLSPAN="14">
+                      pas de pracc :C
+                  </td>
+</tr>
+{% endif %}
+
+  </tbody>
+
+
+</table>
+</main>
+</body>

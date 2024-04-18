@@ -1,0 +1,58 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<main>
+<table>
+
+  <caption>
+    Tableau des Admins
+  </caption>
+
+  <thead>
+    <tr>
+        <th>ID UTILISATEUR</th>
+        <th>ID ADMIN</th>
+        <th>NOM</th>
+        <th>CONNECTÉ - [ FONCTION ]</th>
+        <th>OPÉRATIONS</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for item in admins %}
+<tr>
+    <td>{{ item.idUtilisateur }} (<em>{{ item.nomUtilisateur }}</em>)</td>
+    <td>{{ item.idAdmin }}</td>
+    <td>{{ item.nomAdmin}}</td>
+    <td>
+    {% if item.connected == 1 %}
+            {% set etat = 'ONLINE' %}
+            <b class="online">{{etat}}</b> - [{% if item.fonction == 'ADMIN' %}
+                <b class="admin">{{item.fonction}}</b>
+            {% elif item.fonction == 'PLAYER' %}
+                <b class="player">{{item.fonction}}</b>
+            {% else %}
+                <b class="visitor">{{item.fonction}}</b>
+            {% endif %}]
+        {% else %}
+            {% set etat = 'OFFLINE' %}
+            <em class="offline"><b>{{etat}}</b></em>
+        {% endif %}
+
+    </td>
+    <td>
+        <a href="/admin/player_edit/{{ item.idAdmin }}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
+        <a href="/admin/player_delete/{{ item.idAdmin }}" class="remove-player"><i class="fa-solid fa-user-minus" style="color: #000000;"></i></a>
+    </td>
+
+</tr>
+{% endfor %}
+
+
+
+
+  </tbody>
+
+
+</table>
+</main>
+</body>

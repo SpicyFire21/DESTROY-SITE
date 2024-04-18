@@ -27,6 +27,7 @@ td {
 td,th {
     padding: 10px;
     text-align: center;
+
 }
 
 .actions {
@@ -113,7 +114,7 @@ td,th {
   cursor: pointer;
 }
 
-.player-compo {
+.player-compo,.visitor-games,.admin-games {
     display: flex;
     flex-direction: row;
         align-items: center;
@@ -123,3 +124,24 @@ td,th {
 .player-strats aside {
     width: fit-content;
 }
+
+.offline {
+    color: var(--offline);
+}
+
+.online {
+    color: var(--online);
+}
+
+.admin {
+    color: var(--lightred);
+}
+
+.player {
+    color: var(--blue);
+}
+
+.visitor {
+    color: var(--black);
+}
+

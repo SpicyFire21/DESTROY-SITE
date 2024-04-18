@@ -1,0 +1,19 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<form method="post" action="/admin/match_edit">
+    <fieldset>
+        <legend>
+            MODIFIER UN MATCH
+        </legend>
+        <input type="hidden" value="{{match.idMatch}}" name="id">
+
+        <label for="name">Nom du Match :</label>
+        <input type="text" name="nom" id="name" value="{{match.nomMatch}}">
+
+        <label for="date">Date du Match :</label>
+        <input type="date" name="date" id="date" value="{{match.date_match}}">
+
+        <button type="submit">MODIFIER</button>
+    </fieldset>
+</form>
+</body>

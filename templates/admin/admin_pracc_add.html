@@ -1,0 +1,19 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<form method="post" action="/admin/pracc_add">
+    <fieldset>
+        <legend>
+            AJOUTER UNE PRACC
+        </legend>
+        <input type="hidden" value="" name="id">
+
+        <label for="name">Nom de la Pracc :</label>
+        <input type="text" name="nom" id="name" value="">
+
+        <label for="date">Date de la Pracc :</label>
+        <input type="date" name="date" id="date" value="">
+
+        <button type="submit">MODIFIER</button>
+    </fieldset>
+</form>
+</body>

@@ -24,7 +24,13 @@
                   <td>{{ ligne.pseudo }}</td>
                   <td>{{ ligne.libelle }}</td>
 
-                  <td>X</td>
+                  <td>{% if ligne.connected == 1 %}
+            {% set etat = 'ONLINE' %}
+            <b class="online">{{etat}}</b>
+        {% else %}
+            {% set etat = 'OFFLINE' %}
+            <em class="offline"><b>{{etat}}</b></em>
+        {% endif %}</td>
            </tr>
 
         {% endfor %}

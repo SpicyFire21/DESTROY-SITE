@@ -22,23 +22,34 @@ nav a:hover {
     transition: 0.3s;
 }
 
-.nav-left h2 {
+h2 {
     margin: 0;
-    
+    text-align: center;
 }
 
 .nav-right,.nav-left {
     gap: 10px;
+    width: 350px;
 }
 
 .nav-right a,.nav-left a {
     background-color: var(--lightgray);
     color: var(--red);
+    width: fit-content;
+    height: fit-content;
 }
 .nav-left,.nav-right {
     display: flex;
     flex-direction: row ;
 }
+
+.nav-left {
+    justify-content: left;
+}
+.nav-right {
+    justify-content: right;
+}
+
 
 .b-admin {
     color: var(--lightred);
@@ -46,4 +57,8 @@ nav a:hover {
 
 .b-player {
     color: var(--blue);
+}
+
+.black {
+    color: var(--black);
 }

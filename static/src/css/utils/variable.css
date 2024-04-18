@@ -7,7 +7,10 @@
     --lightgray:#EBEBEB;
     --green: #00b402;
     --blue: #0088e0;
+    --online: #009600;
+    --offline: #960000;
 
     --flash-edit: rgba(0, 255, 1, 0.25);
     --flash-delete: rgba(255, 0, 0, 0.25);
+    --flash-add: rgba(255, 255, 0, 0.25);
 }
