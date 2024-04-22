@@ -27,6 +27,9 @@
                 {{ compo_entry.nomAgent }}
             {% endif %}
         {% endfor %}
+
+
+
         </td>
     {% endfor %}
     <td><a href="/delete_row/{{map.idMap}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></td>
@@ -92,3 +95,4 @@
 
 </main>
 </body>
+{% include 'layout/footer.html' %}

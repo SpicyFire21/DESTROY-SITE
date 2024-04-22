@@ -3,13 +3,20 @@
 
         <a href="/player/index"><i class="fa-solid fa-house" style="color: #000000;"></i></a>
         <a href="/roaster_show"><i class="fa-solid fa-users" style="color: #000000;"></i></a>
-        <a href="/horaire_show"><i class="fa-solid fa-clock" style="color: #000000;"></i></a>
+        <a href="/horaire/show"><i class="fa-solid fa-clock" style="color: #000000;"></i></a>
         <a href="/compo_show"><i class="fa-solid fa-users-viewfinder" style="color: #000000;"></i></a>
         <a href="/strats_show"><i class="fa-solid fa-chess-pawn" style="color: #000000;"></i></a>
     </div>
     <h2>DESTROY ACADEMY</h2>
     <div class="nav-right">
-        <p><em>connecté en tant que</em> <b class="b-player">{{playersession.pseudo}}</b></p>
+
+        <div class="display-log">
+
+                <em>Compte :  </em>
+                <b class="b-player"><i class="fa-solid fa-gamepad fa-beat" ></i> {{playersession.pseudo}} </b>
+
+
+        </div>
         <a href="/editaccount_player"><i class="fa-solid fa-user-pen" style="color: #000000;"></i></a>
         <a href="/logout"><i class="fa-solid fa-right-to-bracket" style="color: #000000;"></i></a>
 

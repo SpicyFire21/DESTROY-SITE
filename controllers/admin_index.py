@@ -28,7 +28,7 @@ def admin_show():
             where u.idJoueur=%s;'''
     mycursor.execute(sql_ps, (id_user,))
     adminsession = mycursor.fetchone()
-
+    print(adminsession)
     get_db().commit()
     if staff:
         return render_template('admin/index.html', staff = staff, adminsession = adminsession)

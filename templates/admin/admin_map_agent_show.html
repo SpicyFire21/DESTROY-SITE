@@ -1,94 +1,103 @@
 {% include 'admin/admin_layout.html' %}
 <body>
 <div class="admin-map-agent">
-<table class="table-map">
+    <table class="table-map">
 
-  <caption>
-    Tableau des Maps
-  </caption>
+        <caption>
+            Tableau des Maps
+        </caption>
 
-  <thead>
-    <tr>
-        <th colspan="3">AJOUTER
-            <a href="/admin/maps_add">
-                <i class="fa-solid fa-circle-plus" style="color: #000000;"></i>
-            </a>
-        </th>
-    </tr>
-    <tr>
-        <th>ID MAPS</th>
-        <th>NOM</th>
-        <th>OPÉRATIONS</th>
-    </tr>
-  </thead>
+        <thead>
+        <tr>
+            <th colspan="3">AJOUTER
+                <a href="/admin/maps_add">
+                    <i class="fa-solid fa-circle-plus" style="color: #000000;"></i>
+                </a>
+            </th>
+        </tr>
+        <tr>
+            <th>ID MAPS</th>
+            <th>NOM</th>
+            <th>OPÉRATIONS</th>
+        </tr>
+        </thead>
 
-  <tbody>
-  {% for map in maps %}
-<tr>
-    <td>{{ map.idMap }}</td>
-    <td>{{ map.libelle }}</td>
-    <td>
-        <a href="/admin/maps_edit/{{map.idMap}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
-        <a href="/admin/maps_delete/{{map.idMap}}" class="delete"><i class="fa-solid fa-trash" style="color: #000000;"></i></a>
-    </td>
+        <tbody>
+        {% for map in maps %}
+        <tr>
+            <td>{{ map.idMap }}</td>
+            <td>{{ map.libelle }}</td>
+            <td>
+                <a href="/admin/maps_edit/{{map.idMap}}" class="edit"><i class="fa-solid fa-pen-to-square"
+                                                                         style="color: #000000;"></i></a>
+                <a href="/admin/maps_delete/{{map.idMap}}" class="delete"><i class="fa-solid fa-trash"
+                                                                             style="color: #000000;"></i></a>
+            </td>
 
-</tr>
-{% endfor %}
-
-
-
-
-  </tbody>
+        </tr>
+        {% endfor %}
 
 
-</table>
-
-<table class="table-agent">
-
-  <caption>
-    Tableau des Agents
-  </caption>
-
-  <thead>
-  <tr>
-        <th colspan="3">AJOUTER
-            <a href="/admin/agents_add">
-                <i class="fa-solid fa-circle-plus" style="color: #000000;"></i>
-            </a>
-        </th>
-    </tr>
-    <tr>
-        <th>ID AGENT</th>
-        <th>NOM</th>
-        <th>OPÉRATIONS</th>
-    </tr>
-  </thead>
-
-  <tbody>
-  {% for agent in agents %}
-  {% if agent.nomAgent != 'None'%}
-<tr>
-
-    <td>{{ agent.idAgent}}</td>
-    <td>{{ agent.nomAgent }}</td>
-
-    <td>
-
-        <a href="/admin/agents_edit/{{agent.idAgent}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
-        <a href="/admin/agents_delete/{{agent.idAgent}}" class="delete"><i class="fa-solid fa-trash" style="color: #000000;"></i></a>
-
-    </td>
-
-</tr>
-  {% endif %}
-{% endfor %}
+        </tbody>
 
 
+    </table>
+
+    <table class="table-agent">
+
+        <caption>
+            Tableau des Agents
+        </caption>
+
+        <thead>
+        <tr>
+            <th colspan="3">AJOUTER
+                <a href="/admin/agents_add">
+                    <i class="fa-solid fa-circle-plus" style="color: #000000;"></i>
+                </a>
+            </th>
+        </tr>
+        <tr>
+            <th>ID AGENT</th>
+            <th>NOM</th>
+            <th>OPÉRATIONS</th>
+        </tr>
+        </thead>
+
+        <tbody>
 
 
-  </tbody>
+            <td colspan="30">
+                L'ID 1 est utilisé pour None
+            </td>
+
+        </td>
+
+        {% for agent in agents %}
+        {% if agent.nomAgent != 'None'%}
+        <tr>
+
+            <td>{{ agent.idAgent}}</td>
+            <td>{{ agent.nomAgent }}</td>
+
+            <td>
+
+                <a href="/admin/agents_edit/{{agent.idAgent}}" class="edit"><i class="fa-solid fa-pen-to-square"
+                                                                               style="color: #000000;"></i></a>
+                <a href="/admin/agents_delete/{{agent.idAgent}}" class="delete"><i class="fa-solid fa-trash"
+                                                                                   style="color: #000000;"></i></a>
+
+            </td>
+
+        </tr>
+        {% endif %}
+        {% endfor %}
 
 
-</table>
+        </tbody>
+
+
+    </table>
 </div>
 </body>
+{% include 'layout/footer.html' %}

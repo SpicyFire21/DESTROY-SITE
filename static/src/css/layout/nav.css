@@ -1,3 +1,4 @@
+@charset "UTF-8";
 nav {
     background-color: var(--white);
     display: flex;
@@ -25,11 +26,15 @@ nav a:hover {
 h2 {
     margin: 0;
     text-align: center;
+    min-width: 250px;
 }
 
-.nav-right,.nav-left {
+
+.nav-left,.nav-right {
+    display: flex;
+    flex-direction: row ;
     gap: 10px;
-    width: 350px;
+    max-width: 450px;
 }
 
 .nav-right a,.nav-left a {
@@ -38,10 +43,7 @@ h2 {
     width: fit-content;
     height: fit-content;
 }
-.nav-left,.nav-right {
-    display: flex;
-    flex-direction: row ;
-}
+
 
 .nav-left {
     justify-content: left;
@@ -61,4 +63,12 @@ h2 {
 
 .black {
     color: var(--black);
+}
+
+.display-log {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    gap: 10px ;
 }

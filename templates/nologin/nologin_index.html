@@ -2,80 +2,63 @@
 {% block body %}
 <body>
 
-<div class="carrousel">
+<!--<div class="carrousel">-->
 
-    <div class="imgslide">
+<!--    <div class="imgslide">-->
 
-        <img class="show" src="{{ url_for('static', filename='assets/img/carrousel-1.png') }}" alt="">
-        <img src="{{ url_for('static', filename='assets/img/carrousel-2.png') }}" alt="">
-        <img src="{{ url_for('static', filename='assets/img/carrousel-3.png') }}" alt="">
-        <img src="{{ url_for('static', filename='assets/img/carrousel-4.png') }}" alt="">
-        <img src="{{ url_for('static', filename='assets/img/carrousel-5.png') }}" alt="">
-        <img src="{{ url_for('static', filename='assets/img/carrousel-6.png') }}" alt="">
-        <img src="{{ url_for('static', filename='assets/img/carrousel-7.png') }}" alt="">
+<!--        <img class="show" src="{{ url_for('static', filename='assets/img/carrousel-1.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-2.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-3.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-4.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-5.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-6.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-7.png') }}" alt="">-->
 
 
-        <button id="g" class="LeftArrow" onclick="SlidePrecedent()"><i class="fa-solid fa-angle-left fa-2xl"
-                                                                       style="color: #000000;"></i></button>
-        <button id="d" class="RightArrow" onclick="SlideSuivant()"><i class="fa-solid fa-angle-right fa-2xl"
-                                                                      style="color: #000000;"></i></button>
+<!--        <button id="g" class="LeftArrow" onclick="SlidePrecedent()"><i class="fa-solid fa-angle-left fa-2xl"-->
+<!--                                                                       style="color: #000000;"></i></button>-->
+<!--        <button id="d" class="RightArrow" onclick="SlideSuivant()"><i class="fa-solid fa-angle-right fa-2xl"-->
+<!--                                                                      style="color: #000000;"></i></button>-->
+
+<!--    </div>-->
+
+
+<!--</div>-->
+
+<!--<div class="slider-container">-->
+<!--    <div class="slider">-->
+<!--        <img class="show" src="{{ url_for('static', filename='assets/img/carrousel-1.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-2.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-3.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-4.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-5.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-6.png') }}" alt="">-->
+<!--        <img src="{{ url_for('static', filename='assets/img/carrousel-7.png') }}" alt="">-->
+<!--        <img class="show" src="{{ url_for('static', filename='assets/img/carrousel-1.png') }}" alt="">-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<div class="slider-1" >
+      <div class="slider-content-1" id="container">
+        <img src="{{ url_for('static', filename='assets/img/carrousel-5.png') }}" alt="" id="slide-old">
+        <img src="{{ url_for('static', filename='assets/img/carrousel-1.png') }}" alt="" id="slide">
+        <img src="{{ url_for('static', filename='assets/img/carrousel-2.png') }}" alt="" id="slide-new">
+
+      </div>
+
+            <button id="previous" onclick="ChangeSlide(-1)">&lt;</button>
+            <button id="next" onclick="ChangeSlide(1)">&gt;</button>
+
 
 
     </div>
 
 
-</div>
 
-<script>
-    const items = document.querySelectorAll('.imgslide img'); // Sélectionnez les images à l'intérieur de la classe "imgslide"
-    const NbrSlide = items.length;
-    const suivant = document.getElementById('d'); // Utilisez l'ID pour sélectionner les boutons
-    const precedent = document.getElementById('g');
-    let count = 0;
-    let autoScrollInterval; // Déclaration de la variable pour l'intervalle du défilement automatique
 
-    // Fonction pour activer le défilement automatique
-    function activerDeplacementAutomatique() {
-        autoScrollInterval = setInterval(SlideSuivant, 10000); // Appeler SlideSuivant() toutes les 3 secondes
-    }
-
-    // Fonction pour désactiver le défilement automatique
-    function desactiverDeplacementAutomatique() {
-        clearInterval(autoScrollInterval); // Effacer l'intervalle pour arrêter le défilement automatique
-    }
-
-    // Fonction pour déplacer vers la diapositive suivante
-    function SlideSuivant() {
-        items[count].classList.remove("show");
-        if (count < NbrSlide - 1) {
-            count++;
-        } else {
-            count = 0;
-        }
-        items[count].classList.add("show");
-    }
-
-    // Fonction pour déplacer vers la diapositive précédente
-    function SlidePrecedent() {
-        items[count].classList.remove("show");
-        if (count > 0) {
-            count--;
-        } else {
-            count = NbrSlide - 1;
-        }
-        items[count].classList.add("show");
-    }
-
-    // Activer le défilement automatique au chargement de la page
-    activerDeplacementAutomatique();
-
-    // Désactiver le défilement automatique lorsqu'on survole le carrousel
-    document.querySelector('.carrousel').addEventListener('mouseenter', desactiverDeplacementAutomatique);
-
-    // Réactiver le défilement automatique lorsque l'utilisateur quitte le carrousel
-    document.querySelector('.carrousel').addEventListener('mouseleave', activerDeplacementAutomatique);
-
-</script>
 
 </body>
 {% endblock %}
+
+{% include 'layout/footer.html' %}

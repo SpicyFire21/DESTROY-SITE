@@ -1,55 +1,163 @@
 {% include 'player/player_layout.html' %}
-<main>
+<body onload="setColor()">
+<main class="player-horaire">
+        <div class="horaire-controller">
+        <button onclick="fetchToPython()">Envoyer les données au backend Python</button>
+        <button>2</button>
+        <button>3</button>
+    </div>
 
-<table>
+    <table class="horaire-perso">
+        <caption>
+            Horaire perso
+        </caption>
+        <thead>
+            <tr>
+                <th></th>
+                {% for jour in jours %}
+                <th scope="col">{{jour.nomJour}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for heure in heures %}
+            <tr>
+                <th>{{ heure.idHeure }}h</th>
+                {% set cell_class = 'red-td' %}
+                {% for jour in jours %}
+                <td class="{{ cell_class }}" data-row="{{heure.idHeure}}" data-col="{{jour.idJour}}">
+                    {% for item in horaires %}
+                    {% if heure.idHeure == item['idHeure'] and jour.idJour == item['idJour'] %}
+                    {% set cell_class = 'green-td' %}
+                    <p style="display: none">{{cell_class}}</p>
+                    {% endif %}
+                    {% endfor %}
+                    <input name="cell" type="hidden" class="checkbox" id="" data-row="{{heure.idHeure}}" data-col="{{jour.idJour}}">
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-  <caption>
-    Horaire perso
-  </caption>
+    <table class="horaire-all">
+        <caption>
+            Horaire Commun
+        </caption>
+        <thead>
+            <tr>
+                <th></th>
+                {% for jour in jours %}
+                <th scope="col">{{jour.nomJour}}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for heure in heures %}
+            <tr>
+                <th>{{ heure.idHeure }}h</th>
 
-  <thead>
-    <tr>
-        <th></th>
-        {% for jour in jours %}
-            <th scope="col">{{jour.nomJour}}</th>
-        {% endfor %}
-    </tr>
-  </thead>
-
-  <tbody>
-  {% for heure in heures %}
-<tr>
-    <th>{{ heure.idHeure }}h</th>
-    {% for jour in jours %}
-        <td>
-<!--        {% for compo_entry in compo %}-->
-<!--            {% if map.idMap == compo_entry.idMap and joueur.idJoueur == compo_entry.idJoueur and compo_entry.nomAgent != 'None' %}-->
-<!--                {{ compo_entry.nomAgent }}-->
-<!--            {% endif %}-->
-<!--        {% endfor %}-->
-            <input type="checkbox" class="checkbox" id="">
-        </td>
-    {% endfor %}
-
-</tr>
-{% endfor %}
-
-
-
-
-  </tbody>
-
-  <tfoot>
-
-  <tr>
-      <th></th>
-      {% for jour in jours %}
-        <th scope="row" >D</th>
-      {% endfor %}
-
-  </tr>
-  </tfoot>
-</table>
-
-
+                {% for jour in jours %}
+                <td class="{{ cell_class }}" data-row="{{heure.idHeure}}" data-col="{{jour.idJour}}">
+                    <!--        affichage commun            -->
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </main>
+
+<script>
+    const selectedCells = [];
+
+    function updateSelectedCells(event) {
+        const checkbox = event.target;
+        const row = checkbox.dataset.row;
+        const col = checkbox.dataset.col;
+
+        if (checkbox.checked) {
+            selectedCells.push({row, col});
+        } else {
+            const cellIndex = selectedCells.findIndex(cell => cell.row === row && cell.col === col);
+            if (cellIndex !== -1) {
+                selectedCells.splice(cellIndex, 1);
+            }
+        }
+
+        getLastSelectedCells();
+    }
+
+    function getLastSelectedCells() {
+        console.log("Horaire : ");
+        selectedCells.forEach(cell => {
+            console.log(`HORAIRE : Heure → ${cell.row}, Jour → ${cell.col}`);
+        });
+        if (selectedCells.length === 0) {
+            console.log('Aucune Horaire Sélectionné');
+        }
+    }
+
+    document.querySelectorAll('td').forEach(td => {
+        let clicked = 0;
+        td.addEventListener('click', () => {
+            const checkbox = td.querySelector('input[name="cell"]');
+
+            if (checkbox) {
+
+                if (clicked === 0){
+                    checkbox.checked = !checkbox.checked;
+
+                    td.classList.add("yellow-td");
+                    clicked = 1;
+                    updateSelectedCells({ target: checkbox });
+                } else {
+                    checkbox.checked = !checkbox.checked;
+
+                    td.classList.remove("yellow-td");
+                    clicked = 0;
+                    updateSelectedCells({ target: checkbox });
+                }
+            }
+        });
+    });
+
+    function fetchToPython() {
+        console.log("clicked")
+        // Convertir les données en format JSON
+        const jsonData = JSON.stringify(selectedCells);
+
+        // Envoi de la requête POST
+        fetch('/horaire/fetch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: jsonData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Erreur lors de l\'envoi des données');
+                }
+                console.log('Données envoyées avec succès');
+            })
+            .catch(error => {
+                console.error('Erreur :', error);
+            });
+    }
+
+    function setColor() {
+        const tds = document.querySelectorAll('td');
+        tds.forEach(td => {
+            const p = td.querySelector('p');
+            if (p) {
+                const cellClass = p.textContent;
+                td.classList.add(cellClass);
+                td.classList.replace("red-td",cellClass);
+            }
+        });
+    }
+</script>
+
+</body>
+{% include 'layout/footer.html' %}

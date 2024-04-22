@@ -1,3 +1,4 @@
+@charset "UTF-8";
 *,
 ::after,
 ::before {
@@ -9,12 +10,13 @@
 body {
     background-color: var(--lightgray);
     overflow-y: scroll; 
-    overflow-x: hidden; 
+    /*overflow-x: hidden; */
 }
 
 table {
     background-color: var(--red);
     margin: auto;
+
 }
 
 thead {
@@ -27,7 +29,27 @@ td {
 td,th {
     padding: 10px;
     text-align: center;
+    font-size: 1rem;
+    width: 2vw;
+    height: 2vw;
 
+
+}
+.no-padding {
+    padding: 0;
+
+}
+
+.yellow-td {
+    border: 3px solid yellow;
+}
+.green-td {
+    background-color: green;
+}
+
+
+.red-td {
+    background-color: red;
 }
 
 .actions {
@@ -35,8 +57,19 @@ td,th {
 }
 
 .checkbox {
-    width: 100%;
-    transform: scale(1.7);
+    display: block;
+    margin: 0 auto;
+    transform: scale(2.5);
+}
+
+.player-horaire {
+    display: flex;
+}
+
+.horaire-controller {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .form-edit fieldset{

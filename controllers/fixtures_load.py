@@ -14,6 +14,7 @@ def fct_fixtures_load():
         sql = f.read()
         sqlCommands = sql.replace('\n', '').split(';')
         for command in sqlCommands:
+            print('sql :',sqlCommands)
             try:
                 if command.strip() != '':
                     cursor.execute(command)

@@ -4,14 +4,20 @@
         <a href="/admin/index"><i class="fa-solid fa-house" style="color: #000000;"></i></a>
         <a href="/admin/users_show"><i class="fa-solid fa-user" style="color: #000000;"></i></a>
         <a href="/admin/players_show"><i class="fa-solid fa-gamepad fa-beat" style="color: #000000;"></i></a>
-        <a href="/admin/mapsagents_show"><i class="fa-solid fa-map" style="color: #000000;"></i> <span class="black">&</span> <i class="fa-solid fa-user-secret" style="color: #000000;"></i></a>
+        <a href="/admin/mapsagents_show1"><i class="fa-solid fa-map" style="color: #000000;"></i> <span class="black">&</span> <i class="fa-solid fa-user-secret" style="color: #000000;"></i></a>
         <a href="/admin/matchs_pracc_show"><i class="fa-solid fa-calendar" style="color: #000000;"></i></a>
         <a href="/admin/root/login"><i class="fa-solid fa-user-tie" style="color: #000000;"></i></a>
 <!--        <a href="/testjs/show"> test </a>-->
     </div>
     <h2>DESTROY ACADEMY</h2>
     <div class="nav-right">
-        <p><em>connecté en tant que</em> <b class="b-admin">{{adminsession.nomAdmin}}</b></p>
+        <div class="display-log">
+
+                <em>Compte :  </em>
+                <b class="b-admin"><i class="fa-solid fa-user-tie fa-lg" ></i> {{adminsession.nomAdmin}} </b>
+
+
+        </div>
         <a href="/editaccount_admin"><i class="fa-solid fa-user-pen" style="color: #000000;"></i></a>
         <a href="/logout"><i class="fa-solid fa-right-to-bracket" style="color: #000000;"></i></a>
     </div>

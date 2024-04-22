@@ -9,7 +9,14 @@
     </div>
     <h2>DESTROY ACADEMY</h2>
     <div class="nav-right">
-        <p><em>connecté en tant que</em> <b>{{visitorsession.nomUtilisateur}}</b></p>
+
+        <div class="display-log">
+
+                <em>Compte :  </em>
+                <b><i class="fa-solid fa-user fa-beat" ></i> {{visitorsession.nomUtilisateur}} </b>
+
+
+        </div>
         <a href="/editaccount_visitor"><i class="fa-solid fa-user-pen" style="color: #000000;"></i></a>
         <a href="/logout"><i class="fa-solid fa-right-to-bracket" style="color: #000000;"></i></a>
     </div>

@@ -1,6 +1,8 @@
+#! /usr/bin/python
+# -*- coding:utf-8 -*-
+
 SET sql_mode=(SELECT CONCAT(@@sql_mode,',ONLY_FULL_GROUP_BY'));
 
-# drop pas dans l'ordre ...
 DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS joueurs;
 DROP TABLE IF EXISTS map;
@@ -17,62 +19,62 @@ DROP TABLE IF EXISTS root;
 
 CREATE TABLE IF NOT EXISTS root(
   idRoot INT not null auto_increment,
-  nomRoot VARCHAR(50) ,
-    mdp VARCHAR(255),
-    PRIMARY KEY (idRoot)
-);
+  nomRoot VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+  mdp VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+  PRIMARY KEY (idRoot)
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 
 
 CREATE TABLE IF NOT EXISTS role(
    idRole INT NOT NULL AUTO_INCREMENT,
-   libelle VARCHAR(50),
+   libelle VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
    PRIMARY KEY(idRole)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS joueurs(
     idJoueur INT NOT NULL AUTO_INCREMENT,
-    pseudo VARCHAR(50),
-    titulaire boolean,
+    pseudo VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+    titulaire BOOLEAN,
     idRole INT NOT NULL,
     PRIMARY KEY(idJoueur),
     FOREIGN KEY(idRole) REFERENCES Role(idRole)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS utilisateur(
    idUtilisateur INT not null auto_increment,
-   nomUtilisateur VARCHAR(50),
-   login VARCHAR(50),
-   email VARCHAR(50),
-   mdp VARCHAR(255),
-    fonction VARCHAR(50),
-    connected boolean,
-   idAdmin INT ,
-   idJoueur INT ,
+   nomUtilisateur VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+   login VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+   email VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+   mdp VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
+   fonction VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+   connected BOOLEAN,
+   idAdmin INT,
+   idJoueur INT,
    PRIMARY KEY(idUtilisateur),
    UNIQUE(idAdmin),
    UNIQUE(idJoueur),
    FOREIGN KEY(idAdmin) REFERENCES admin(idAdmin),
    FOREIGN KEY(idJoueur) REFERENCES Joueurs(idJoueur)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS admin(
    idAdmin INT not null auto_increment,
-   nomAdmin VARCHAR(50),
+   nomAdmin VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
    PRIMARY KEY(idAdmin)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS map(
   idMap INT NOT NULL AUTO_INCREMENT,
-  libelle VARCHAR(50),
-    PRIMARY KEY (idMap)
-);
+  libelle VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+  PRIMARY KEY (idMap)
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS agent(
   idAgent INT AUTO_INCREMENT,
-    nomAgent VARCHAR(50),
-    PRIMARY KEY (idAgent)
-);
+  nomAgent VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+  PRIMARY KEY (idAgent)
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS compo(
     idJoueur INT,
@@ -82,19 +84,19 @@ CREATE TABLE IF NOT EXISTS compo(
     FOREIGN KEY (idJoueur) REFERENCES joueurs(idJoueur),
     FOREIGN KEY (idMap) REFERENCES map(idMap),
     FOREIGN KEY (idAgent) REFERENCES agent(idAgent)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS jour(
    idJour INT,
-   nomJour VARCHAR(50),
+   nomJour VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
    PRIMARY KEY(idJour)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS heure(
    idHeure INT,
-   heure boolean,
+   heure BOOLEAN,
    PRIMARY KEY(idHeure)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS horaire(
    idJoueur INT,
@@ -104,41 +106,53 @@ CREATE TABLE IF NOT EXISTS horaire(
    FOREIGN KEY(idJoueur) REFERENCES Joueurs(idJoueur),
    FOREIGN KEY(idJour) REFERENCES Jour(idJour),
    FOREIGN KEY(idHeure) REFERENCES Heure(idHeure)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS matchs(
     idMatch INT NOT NULL AUTO_INCREMENT,
-    nomMatch VARCHAR(50),
-    commentaire VARCHAR(255),
+    nomMatch VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+    commentaire VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
     date_match DATE,
     date_ajout DATETIME,
     PRIMARY KEY (idMatch)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
 CREATE TABLE IF NOT EXISTS pracc(
     idPracc INT NOT NULL AUTO_INCREMENT,
-    nomPracc VARCHAR(50),
-    commentaire VARCHAR(255),
+    nomPracc VARCHAR(50) CHARACTER SET utf8 COLLATE utf8_general_ci,
+    commentaire VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci,
     date_pracc DATE,
     date_ajout DATETIME,
     PRIMARY KEY (idPracc)
-);
+) DEFAULT CHARACTER SET=utf8 COLLATE=utf8_general_ci;
 
+INSERT INTO role (libelle)
+VALUES
+('Duelliste'),
+('Initiateur'),
+('Flex'),
+('Controlleur'),
+('Sentinelle'),
+('Remplaçant'),
+('Coach'),
+('Non Défini')
+;
 
 INSERT INTO matchs (nomMatch, date_match, date_ajout) VALUES
 ('Match1', '2024-04-01', NOW()),
 ('Match2', '2024-04-05', NOW()),
 ('Match3', '2024-04-10', NOW()),
 ('Match4', '2024-04-15', NOW()),
-('Match5', '2024-04-20', NOW());
+('Match5', '2024-04-20', NOW())
+;
 
 INSERT INTO pracc (nomPracc, date_pracc, date_ajout) VALUES
 ('Pracc1', '2024-04-02', NOW()),
 ('Pracc2', '2024-04-06', NOW()),
 ('Pracc3', '2024-04-11', NOW()),
 ('Pracc4', '2024-04-16', NOW()),
-('Pracc5', '2024-04-21', NOW());
-
+('Pracc5', '2024-04-21', NOW())
+;
 
 INSERT INTO compo (idJoueur, idMap, idAgent) VALUES
 (1, 1, 1),
@@ -155,11 +169,12 @@ INSERT INTO compo (idJoueur, idMap, idAgent) VALUES
 (2, 5, 12),
 (3, 6, 13),
 (4, 7, 14),
-(5, 1, 15);
-
+(5, 1, 15)
+;
 
 INSERT INTO agent (nomAgent) VALUES
-('None');
+('None')
+;
 
 
 
@@ -178,19 +193,11 @@ INSERT INTO joueurs (pseudo, titulaire, idRole) VALUES
 ('Diamond', TRUE, 4),
 ('Zerios', TRUE, 2);
 
-INSERT INTO role(libelle) VALUE
-('Duelliste'),
-('Initiateur'),
-('Flex'),
-('Controlleur'),
-('Sentinelle'),
-('Remplaçant'),
-('Coach'),
-('Non défini');
+
 
 INSERT INTO admin ( nomAdmin) VALUES
-( 'Admin-SpicyFire'),
-( 'Admin-DracotiuM');
+( 'SpicyFire'),
+( 'DracotiuM');
 
 INSERT INTO jour (idJour, nomJour) VALUES
 (1, 'Lundi'),
@@ -228,11 +235,3 @@ INSERT INTO heure (idHeure, heure) VALUES
 (24, FALSE);
 
 INSERT INTO root (nomRoot,mdp) values ('root1','pbkdf2:sha256:600000$m3xBga3XDY6uJ1xN$643e2e8a715664cc946998a911ef5f448d26e042ff8a6915166b1faa2406e2e6');
-
-# INSERT INTO joueurs (idJoueur, pseudo, login, email, mdp, fonction, idRole) VALUES
-# (1, 'SpicyFire', 'SpicyFire', 'khnagui.adam@gmail.com', 'pbkdf2:sha256:600000$m3xBga3XDY6uJ1xN$643e2e8a715664cc946998a911ef5f448d26e042ff8a6915166b1faa2406e2e6', 'player', 0),
-# (2, 'sPer', 'sPer', 'email@email.com', 'pbkdf2:sha256:600000$O9qKKhEFNyQ7hRuH$42c407dea492321a6fe1111c4ca3a8ddd32f5ac692ab9a6f1ea5560eacc74c33', 'player', 0),
-# (3, 'DracotiuM', 'DracotiuM', 'email@email.com', 'pbkdf2:sha256:600000$OOZasfGUuvZLLJwb$129b88a20f33102a30558f75adda1d2879003017d467a80a4a727d769b823e14', 'player', 0),
-# (4, 'Diamond', 'Diamond', 'email@email.com', 'pbkdf2:sha256:600000$l87LCYNGvs52HS8M$4c02c55dec139ea7b32d98eec763f610846fd135e3f3b7c7c2d17201784f2993', 'player', 0),
-# (5, 'Zerios', 'Zerios', 'email@email.com', 'pbkdf2:sha256:600000$TGhqz3j9ggePkEcv$0b6c8570399d567daef07578bce853315c129610c77a975b851caacf07dfe59f', 'player', 0);
-
