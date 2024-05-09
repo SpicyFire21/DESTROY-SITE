@@ -11,7 +11,6 @@ player_horaire = Blueprint('player_horaire', __name__,
                            template_folder = 'templates')
 
 
-
 @player_horaire.route('/horaire/show')
 def player_horaire_show():
     mycursor = get_db().cursor()
@@ -28,6 +27,9 @@ def player_horaire_show():
     mycursor.execute(sql_horaire, (id_user,))
     horaires = mycursor.fetchall()
 
+    sql_player = '''SELECT * FROM joueurs where titulaire=1;'''
+    mycursor.execute(sql_player)
+    players = mycursor.fetchall()
 
     # connecté en tant que
     id_user = session['id_user']
@@ -41,7 +43,8 @@ def player_horaire_show():
                            playersession = playersession,
                            jours = jours,
                            heures = heures,
-                           horaires = horaires)
+                           horaires = horaires,
+                           players = players)
 
 
 @player_horaire.route('/horaire/fetch', methods = ['POST'])
@@ -95,4 +98,13 @@ def player_horaire_fetch():
             print(f"L'entrée existe déjà en base de données : idHeure={row}, idJour={col}")
 
     get_db().commit()
+    return redirect('/horaire/show')
+
+
+@player_horaire.route('/horaire/reset', methods = ['POST'])
+def player_horaire_reset():
+    mycursor = get_db().cursor()
+    id_user = session['id_user']
+    sql_delete = '''DELETE FROM horaire where idJoueur=%s;'''
+    mycursor.execute(sql_delete, (id_user,))
     return redirect('/horaire/show')

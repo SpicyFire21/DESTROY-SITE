@@ -17,7 +17,9 @@ def player_compo_show():
     mycursor = get_db().cursor()
 
 
-    sql_joueurs = '''SELECT * FROM joueurs LIMIT 5 ;'''
+    sql_joueurs = '''SELECT * FROM joueurs 
+    join role r on joueurs.idRole = r.idRole
+    LIMIT 5 ;'''
     mycursor.execute(sql_joueurs)
     titulaire = mycursor.fetchall()
 
@@ -26,17 +28,17 @@ def player_compo_show():
     maps = mycursor.fetchall()
 
     if not maps:
-        print("maps")
+
         pyfetchMap()
         mycursor.execute(sql_map)
         maps = mycursor.fetchall()
 
-    sql_agent = '''SELECT * FROM agent where nomAgent not like 'None' ORDER BY idAgent ASC, nomAgent ASC;'''
+    sql_agent = '''SELECT * FROM agent where nomAgent not like 'None' ORDER BY nomAgent ASC;'''
     mycursor.execute(sql_agent)
     agents = mycursor.fetchall()
 
     if not agents:
-        print("agents")
+
         pyfetchAgent()
         mycursor.execute(sql_agent)
         agents = mycursor.fetchall()
@@ -47,7 +49,7 @@ def player_compo_show():
     selected_agent_id = [item['idAgent'] for item in agents]
 
     # Construction de la requête SQL en utilisant des tuples de valeurs
-    sql_compo = '''SELECT j.pseudo,m.libelle,a.nomAgent,j.idJoueur,m.idMap,a.idAgent FROM compo 
+    sql_compo = '''SELECT j.pseudo,m.libelle,a.nomAgent,j.idJoueur,m.idMap,a.idAgent,a.imgAgent FROM compo 
                    JOIN agent a ON compo.idAgent = a.idAgent
                    JOIN map m ON compo.idMap = m.idMap
                    JOIN joueurs j ON compo.idJoueur = j.idJoueur
@@ -58,6 +60,10 @@ def player_compo_show():
     compo = mycursor.fetchall()
     sql_delete='''DELETE FROM compo WHERE idAgent=1'''
     mycursor.execute(sql_delete)
+
+    sql_roles = '''SELECT * From role;'''
+    mycursor.execute(sql_roles)
+    roles = mycursor.fetchall()
 
     # connecté en tant que
     id_user = session['id_user']
@@ -71,7 +77,7 @@ def player_compo_show():
 
     get_db().commit()
     return render_template('player/player_compo.html', titulaire=titulaire, maps=maps, agents=agents,
-                           compo=compo, playersession = playersession)
+                           compo=compo, playersession = playersession, roles = roles)
 
 
 

@@ -19,6 +19,12 @@ def player_show():
     player = mycursor.fetchone()
     print(player)
 
+
+    sql_match = '''SELECT * FROM matchs order by date_match asc LIMIT 10;'''
+    mycursor.execute(sql_match)
+    matchs = mycursor.fetchall()
+
+
     # connecté en tant que
     id_user = session['id_user']
     sql_ps = '''SELECT * FROM utilisateur u 
@@ -29,7 +35,7 @@ def player_show():
 
 
     if player:
-        return render_template('player/index.html', player = player, playersession = playersession)
+        return render_template('player/index.html', player = player, playersession = playersession,matchs = matchs)
     else:
         flash(u'Vous n\'avez pas les droits pour être inscrit en tant que Joueur ou votre compte n\'existe pas.', 'alert-warning')
         return redirect('/login')

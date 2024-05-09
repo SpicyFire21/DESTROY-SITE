@@ -14,35 +14,15 @@ admin_map_agent = Blueprint('admin_map_agent', __name__,
 @admin_map_agent.route('/admin/mapsagents_show1')
 def admin_maps_agents1():
     mycursor = get_db().cursor()
-    resMap = requests.get('https://valorant-api.com/v1/maps')
-    fetchMap = resMap.json()
-    dataMap = fetchMap['data']
-
-    resAgent = requests.get('https://valorant-api.com/v1/agents')
-    fetchAgent = resAgent.json()
-    dataAgent = fetchAgent['data']
-
-    # for itemA in dataAgent:
-        # print('itemA',itemA['displayName'])
-        # sql2 = '''SELECT * FROM agent where nomAgent not like 'None' AND nomAgent like %s;'''
-        # mycursor.execute(sql2, (itemA['displayName'],))
-        # agents = mycursor.fetchall()
+    # resMap = requests.get('https://valorant-api.com/v1/maps')
+    # fetchMap = resMap.json()
+    # dataMap = fetchMap['data']
+    #
+    # resAgent = requests.get('https://valorant-api.com/v1/agents')
+    # fetchAgent = resAgent.json()
+    # dataAgent = fetchAgent['data']
     pyfetchAgent()
-        # if not agents:
-        #
-        #     mycursor.execute(sql2, (itemA['displayName'],))
-        #     agents = mycursor.fetchall()
-
-    # for itemM in dataMap:
-        # print('itemM', itemM['displayName'])
-        # sql1 = '''SELECT * FROM map where libelle like %s ;'''
-        # mycursor.execute(sql1, (itemM['displayName'],))
-        # maps = mycursor.fetchall()
     pyfetchMap()
-        # if not maps:
-        #
-        #     mycursor.execute(sql1, (itemM['displayName'],))
-        #     maps = mycursor.fetchall()
 
     sql1 = '''SELECT * FROM map;'''
     mycursor.execute(sql1)
@@ -67,20 +47,40 @@ def pyfetchAgent():
     response = requests.get('https://valorant-api.com/v1/agents')
     res = response.json()
     mycursor = get_db().cursor()
-
+    print('res', res)
     sql_check = '''SELECT * FROM agent where nomAgent=%s;'''
 
-    insert_query = """INSERT INTO agent (nomAgent)VALUES (%s)"""
+    insert_query = """INSERT INTO agent (nomAgent,imgAgent,roleAgent)VALUES (%s,%s,%s)"""
     data = res['data']
+    print('data', data)
+
     for row in data:
+        role = row['role']
+        # print('role', role['displayName'])
         if row['isPlayableCharacter']:
             mycursor.execute(sql_check, (row['displayName'],))
             check = mycursor.fetchone()
-            print('##############"')
-            print('check', check)
-            if not check:
 
-                mycursor.execute(insert_query, (row['displayName'],))
+            if not check:
+                img = str(row['displayIcon'])
+                bdd_img = "https://media.valorant-api.com/agents/"
+                image = img.replace(bdd_img, "")
+
+                role = role['displayName']
+
+                if role == 'Initiator':
+                    role = 'Initiateur'
+
+                if role == 'Sentinel':
+                    role = 'Sentinelle'
+
+                if role == 'Duelist':
+                    role = 'Duelliste'
+
+                if role == 'Controller':
+                    role = 'Controlleur'
+
+                mycursor.execute(insert_query, (row['displayName'], image, role,))
 
     return redirect('/admin/mapsagents_show1')
 
@@ -88,21 +88,23 @@ def pyfetchAgent():
 def pyfetchMap():
     response = requests.get('https://valorant-api.com/v1/maps')
     res = response.json()
+
     mycursor = get_db().cursor()
 
-    sql_check ='''SELECT * FROM map where libelle=%s;'''
+    sql_check = '''SELECT * FROM map where libelle=%s;'''
 
-    insert_query = """INSERT INTO map (libelle)VALUES (%s)"""
+    insert_query = """INSERT INTO map (libelle, imgMap) VALUES (%s,%s)"""
     data = res['data']
     for row in data:
-        if row['narrativeDescription']:
+        if row['tacticalDescription']:
             mycursor.execute(sql_check, (row['displayName'],))
             check = mycursor.fetchone()
-            print('##############"')
-            print('check', check)
             if not check:
+                img = str(row['splash'])
+                bdd_img = "https://media.valorant-api.com/maps/"
+                image = img.replace(bdd_img, "")
 
-                mycursor.execute(insert_query, (row['displayName'],))
+                mycursor.execute(insert_query, (row['displayName'], image,))
 
     return redirect('/admin/mapsagents_show1')
 
@@ -256,7 +258,6 @@ def valid_admin_agent_add():
     return redirect('/admin/mapsagents_show2')
 
 
-
 @admin_map_agent.route('/admin/mapsagents_show2')
 def admin_maps_agents2():
     mycursor = get_db().cursor()
@@ -277,4 +278,3 @@ def admin_maps_agents2():
 
     get_db().commit()
     return render_template('admin/admin_map_agent_show.html', maps = maps, agents = agents, adminsession = adminsession)
-
