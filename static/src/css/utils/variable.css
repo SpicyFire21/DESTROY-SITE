@@ -1,3 +1,4 @@
+@charset "UTF-8";
 :root {
     --red: #470303;
     --lightred: #d35a5a;
@@ -9,6 +10,7 @@
     --blue: #0088e0;
     --online: #009600;
     --offline: #960000;
+    --void: rgba(150, 0, 0, 0);
 
     --flash-edit: rgba(0, 255, 1, 0.25);
     --flash-delete: rgba(255, 0, 0, 0.25);

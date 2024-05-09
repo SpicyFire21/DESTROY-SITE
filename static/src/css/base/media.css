@@ -8,3 +8,26 @@
     aspect-ratio: 256/256;
     width: 25%;
 }
+
+.img-map-admin {
+    aspect-ratio: auto;
+    width: 8vw;
+}
+
+.img-agent-admin {
+    aspect-ratio: auto;
+    width: 4vw;
+}
+
+.img-strats {
+    aspect-ratio: auto;
+    width: 100%;
+
+    object-fit: cover;
+
+}
+
+.img-compo-player {
+    aspect-ratio: auto;
+    max-width: 50px;
+}
