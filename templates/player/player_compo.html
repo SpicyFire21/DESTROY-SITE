@@ -1,98 +1,123 @@
 {% include 'player/player_layout.html' %}
 <body>
 <main class="player-compo">
-<table>
+    <table>
 
-  <caption>
-    Tableau des Compo
-  </caption>
+        <caption>
+            Tableau des Compo
+        </caption>
 
-  <thead>
-    <tr>
-        <th></th>
-        {% for ligne in titulaire %}
-            <th scope="col">{{ligne.pseudo}}</th>
-        {% endfor %}
-    </tr>
-  </thead>
-
-  <tbody>
-  {% for map in maps %}
-<tr>
-    <th>{{ map.libelle }}</th>
-    {% for joueur in titulaire %}
-        <td>
-        {% for compo_entry in compo %}
-            {% if map.idMap == compo_entry.idMap and joueur.idJoueur == compo_entry.idJoueur and compo_entry.nomAgent != 'None' %}
-                {{ compo_entry.nomAgent }}
-            {% endif %}
-        {% endfor %}
-
-
-
-        </td>
-    {% endfor %}
-    <td><a href="/delete_row/{{map.idMap}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></td>
-</tr>
-{% endfor %}
-
-
-
-
-  </tbody>
-
-  <tfoot>
-    <tr>
-        <th></th>
-        <th scope="row" >Duelliste</th>
-        <th scope="row" >Initiateur</th>
-        <th scope="row" >Flex</th>
-        <th scope="row" >Controlleur</th>
-        <th scope="row" >Sentinelle</th>
-    </tr>
-  <tr>
-      <th></th>
-      {% for joueur in titulaire %}
-        <th scope="row" ><a href="/delete_column/{{joueur.idJoueur}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></th>
-      {% endfor %}
-
-  </tr>
-  </tfoot>
-</table>
-
-
-<form method="POST" action="/compo_edit" class="form-edit-compo">
-    <fieldset>
-        <div>
-        <label for="Map">Map :</label>
-        <select name="Map" id="Map" required>
-            {% for ligne in maps %}
-                <option value="{{ligne.idMap}}">{{ligne.libelle}}</option>
-            {% endfor %}
-        </select>
-        </div>
-        <div>
-        <label for="Agent">Agent :</label>
-        <select name="Agent" id="Agent" required>
-            {% for ligne in agents %}
-                <option value="{{ligne.idAgent}}">{{ligne.nomAgent}}</option>
-            {% endfor %}
-        </select>
-        </div>
-        <div>
-        <label for="Joueurs">Joueur :</label>
-        <select name="Joueurs" id="Joueurs">
+        <thead>
+        <tr>
+            <th></th>
             {% for ligne in titulaire %}
-                <option value="{{ligne.idJoueur}}">{{ligne.pseudo}}</option>
+            <th scope="col">{{ligne.pseudo}}</th>
             {% endfor %}
-        </select>
-        </div>
-        <button type="submit" name="submitedit" class="submit-edit-compo">MODIFIER</button>
-    </fieldset>
+        </tr>
+        </thead>
 
-</form>
+        <tbody>
+        {% for map in maps %}
+        <tr>
+            <th>{{ map.libelle }}</th>
+            {% for joueur in titulaire %}
+
+            <td class="compo-td">
+
+                {% for compo_entry in compo %}
+                {% if map.idMap == compo_entry.idMap and joueur.idJoueur == compo_entry.idJoueur and compo_entry.nomAgent != 'None' %}
+<!--                {{ compo_entry.nomAgent }}-->
+                <img src="https://media.valorant-api.com/agents/{{ compo_entry.imgAgent }}" alt="" class="img-compo-player">
+                {% endif %}
+                {% endfor %}
+
+
+            </td>
+
+            {% endfor %}
+            <td><a href="/delete_row/{{map.idMap}}" class="delete"><i class="fa-solid fa-trash fa-flip-horizontal fa-xl"
+                                                                      style="color: #000000;"></i></a></td>
+
+        </tr>
+        {% endfor %}
+
+
+        </tbody>
+
+        <tfoot>
+        <tr>
+            <th></th>
+            <th scope="row">Duelliste</th>
+            <th scope="row">Initiateur</th>
+            <th scope="row">Flex</th>
+            <th scope="row">Controlleur</th>
+            <th scope="row">Sentinelle</th>
+        </tr>
+        <tr>
+            <th></th>
+            {% for joueur in titulaire %}
+            <th scope="row"><a href="/delete_column/{{joueur.idJoueur}}" class="delete"><i
+                    class="fa-solid fa-trash fa-flip-horizontal fa-xl" style="color: #000000;"></i></a></th>
+            {% endfor %}
+
+        </tr>
+        </tfoot>
+    </table>
+
+
+    <form method="POST" action="/compo_edit" class="form-edit-compo">
+        <fieldset>
+            <div>
+                <label for="Map">Map :</label>
+                <select name="Map" id="Map" required>
+                    <option value="">-- Map --</option>
+                    {% for ligne in maps %}
+                    <option value="{{ligne.idMap}}">{{ligne.libelle}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="Agent">Agent :</label>
+                <select name="Agent" id="Agent" required>
+                    <option value="" >-- Agent --</option>
+                    <option value="1" id="" >None</option>
+                    {% for ligne in agents %}
+                    <option value="{{ligne.idAgent}}" id="{{ligne.roleAgent}}" >{{ligne.nomAgent}}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="Joueurs">Joueur :</label>
+                <select name="Joueurs" id="Joueurs" onchange="selectByRole()">
+                    <option value="">-- Joueur --</option>
+                    {% for ligne in titulaire %}
+                    <option value="{{ligne.idJoueur}}" id="{{ligne.libelle}}">{{ligne.pseudo}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" name="submitedit" class="submit-edit-compo">MODIFIER</button>
+        </fieldset>
+
+    </form>
 
 
 </main>
+
+<script>
+    function selectByRole() {
+    const selectedOption = document.getElementById("Joueurs").options[document.getElementById("Joueurs").selectedIndex];
+    const Aoptions = document.querySelectorAll('#Agent option');
+
+    Aoptions.forEach(option => {
+        if (option.id !== ''){
+            option.style.display = (selectedOption.id === option.id || selectedOption.id === 'Flex') ? '' : 'none';
+        }
+
+    });
+}
+
+
+</script>
 </body>
 {% include 'layout/footer.html' %}

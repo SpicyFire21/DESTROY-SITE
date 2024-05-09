@@ -2,8 +2,12 @@
 <body onload="setColor()">
 <main class="player-horaire">
         <div class="horaire-controller">
-        <button onclick="fetchToPython()">Envoyer les données au backend Python</button>
-        <button>2</button>
+            <form action="/horaire/show">
+                <button onclick="fetchToPython()">Valider</button>
+            </form>
+            <form action="/horaire/reset" method="post">
+        <button>Reset</button>
+            </form>
         <button>3</button>
     </div>
 
@@ -40,9 +44,16 @@
         </tbody>
     </table>
 
+    <div class="horaire-select">
+    {% for player in players %}
+
+                <div><input type="checkbox">{{player.pseudo}}</input></div>
+            {% endfor %}
+    </div>
     <table class="horaire-all">
         <caption>
             Horaire Commun
+
         </caption>
         <thead>
             <tr>

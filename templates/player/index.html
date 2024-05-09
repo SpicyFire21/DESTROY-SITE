@@ -1,3 +1,59 @@
 {% include 'player/player_layout.html' %}
-<h1>Bienvenue {{player.pseudo}}</h1>
+<body>
+<main>
+    <h1>Bienvenue {{player.pseudo}}</h1>
+    <div class="player-index-containers">
+        <div>
+            <img src="https://valorantinfo.com/images/fr/neon_valorant_icon_3709.webp" style="aspect-ratio: auto; width: 300px">
+        </div>
+
+
+        <table style="margin: 0;">
+            <thead>
+            <th colspan="30">Derniers Match</th>
+            </thead>
+
+            <tbody>
+
+            {% for item in matchs %}
+                <tr>
+                    <td>{{item.nomMatch}}</td>
+                    <td>{{item.date_match}}</td>
+                    {% if item.lien ==None %}
+                        <td> X </td>
+                    {% else %}
+                        <td><a href="{{item.lien}}" style="text-decoration: none;color: var(--black);"><i class="fa-regular fa-circle-play fa-xl" style="color: #000000;"></i></a></td>
+                    {% endif %}
+                </tr>
+
+            {% endfor %}
+
+            </tbody>
+        </table>
+        <article class="article-player-index">
+            <h2>Patch Notes : X</h2>
+            <ul>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+            </ul>
+        </article>
+        <article class="article-player-index">
+            <h2>Nouveautés du Serveur Discord</h2>
+            <ul>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+            </ul>
+        </article>
+
+    </div>
+
+
+</main>
+</body>
 {% include 'layout/footer.html' %}

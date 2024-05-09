@@ -1,11 +1,43 @@
 {% include 'player/player_layout.html' %}
-<body class="player-strats">
+<body>
+<main class="player-strats">
 <aside>
-    <ul>
-      <li><a href="/">Article 1</a></li>
-      <li><a href="/">Article 2</a></li>
-      <li><a href="/">Article 3</a></li>
-    </ul>
+
+    {% for map in maps %}
+    <div class="aside-content" >
+        <img src="https://media.valorant-api.com/maps/{{ map.imgMap }}" alt="" class="img-strats">
+        <u onclick="showCompo( {{map.idMap}} )">{{map.libelle}}</u>
+    {% for item in compo %}
+        {% if map.idMap == item.idMap %}
+            <div class="compo-map" style="display: none;" name="{{item.idMap}}" >
+
+                    <p>{{item.pseudo}}</p>
+                <br>
+                    <p>{{item.nomAgent}}</p>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+
+    {%endfor%}
+
 </aside>
+</main>
+
+<script>            
+    function showCompo(Map){
+        console.log(":D →", Map)
+        const divs = document.getElementsByClassName("compo-map");
+        const compo = document.getElementsByName(Map);
+        for (let i = 0 ; i < divs.length; i++){
+            divs[i].style.display = "none";
+        }
+        for (let i = 0 ; i < compo.length; i++){
+            compo[i].style.display = "block";
+        }
+    }
+</script>
+
 </body>
 {% include 'layout/footer.html' %}

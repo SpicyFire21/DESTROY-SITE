@@ -14,7 +14,7 @@
         <th>PSEUDO</th>
         <th>TITULAIRE</th>
         <th>ROLE</th>
-        <th>CONNECTÉ</th>
+        <th>CONNECTÉ - [ FONCTION ]</th>
         <th>OPÉRATIONS</th>
     </tr>
   </thead>
@@ -39,7 +39,13 @@
     <td>
     {% if player.connected == 1 %}
             {% set etat = 'ONLINE' %}
-            <b class="online">{{etat}}</b>
+            <b class="online">{{etat}}</b> - [{% if player.fonction == 'ADMIN' %}
+                <b class="admin">{{player.fonction}}</b>
+            {% elif player.fonction == 'PLAYER' %}
+                <b class="player">{{player.fonction}}</b>
+            {% else %}
+                <b class="visitor">{{player.fonction}}</b>
+            {% endif %}]
         {% else %}
             {% set etat = 'OFFLINE' %}
             <em class="offline"><b>{{etat}}</b></em>

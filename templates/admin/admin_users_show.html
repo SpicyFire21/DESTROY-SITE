@@ -12,7 +12,7 @@
         <th>NOM</th>
         <th>LOGIN</th>
         <th>EMAIL</th>
-
+       <th>CONNECTÉ - [ FONCTION ]</th>
 
 
         <th>OPÉRATIONS</th>
@@ -26,6 +26,24 @@
     <td>{{ user.nomUtilisateur }}</td>
     <td>{{ user.login }}</td>
     <td>{{ user.email }}</td>
+
+    <td>
+    {% if user.connected == 1 %}
+            {% set etat = 'ONLINE' %}
+            <b class="online">{{etat}}</b> - [{% if user.fonction == 'ADMIN' %}
+                <b class="admin">{{user.fonction}}</b>
+            {% elif user.fonction == 'PLAYER' %}
+                <b class="player">{{user.fonction}}</b>
+            {% else %}
+                <b class="visitor">{{user.fonction}}</b>
+            {% endif %}]
+        {% else %}
+            {% set etat = 'OFFLINE' %}
+            <em class="offline"><b>{{etat}}</b></em>
+        {% endif %}
+
+    </td>
+
     <td class="actions">
         <a href="/admin/users_edit/{{user.idUtilisateur}}" class="edit"><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
         <a href="/admin/users_delete/{{user.idUtilisateur}}" class="delete"><i class="fa-solid fa-trash" style="color: #000000;"></i></a>

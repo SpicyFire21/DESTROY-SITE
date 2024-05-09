@@ -1,99 +1,115 @@
 {% include 'player/player_layout.html' %}
 <body>
 <div class="roaster-body">
-<table class="all-player">
+    <table class="all-player">
 
-  <caption>
-    Tableau de tous les joueurs de DESTROY ACADEMY
-  </caption>
+        <caption>
+            Tableau de tous les joueurs de DESTROY ACADEMY
+        </caption>
 
-  <thead>
-    <tr>
-        <th scope="col">Pseudo</th>
-        <th scope="col">Role</th>
-        <th scope="col"> Droit</th>
-        <th scope="col">Connecté</th>
-    </tr>
-  </thead>
+        <thead>
+        <tr>
+            <th scope="col">Pseudo</th>
+            <th scope="col">Role</th>
 
-  <tbody>
+            <th scope="col">Connecté</th>
+        </tr>
+        </thead>
 
-    {% if roaster | length >= 1 %}
-        {% for ligne in roaster %}
+        <tbody>
 
-           <tr>
-                  <td>{{ ligne.pseudo }}</td>
-                  <td>{{ ligne.libelle }}</td>
-                    <td>{{ligne.fonction}}</td>
-                  <td>X</td>
-           </tr>
+        {% if players | length >= 1 %}
+        {% for ligne in players %}
+
+        <tr>
+            <td>{{ ligne.pseudo }}</td>
+            <td>{{ ligne.libelle }}</td>
+            <td>
+                {% if ligne.connected == 1 %}
+                    {% set etat = 'ONLINE' %}
+                    <b class="online">{{etat}}</b>
+                {% else %}
+                    {% set etat = 'OFFLINE' %}
+                    <em class="offline"><b>{{etat}}</b></em>
+                {% endif %}
+
+            </td>
+        </tr>
 
         {% endfor %}
-    {% else %}
-            <tr>
-                  <td>
-                      pas de joueurs :C
-                  </td>
-           </tr>
-    {% endif %}
+        {% else %}
+        <tr>
+            <td>
+                pas de joueurs :C
+            </td>
+        </tr>
+        {% endif %}
 
 
-  </tbody>
+        </tbody>
 
-  <tfoot>
-    <tr>
-            <th scope="row" colspan="3">Nombre de Joueurs</th>
+        <tfoot>
+        <tr>
+            <th scope="row" colspan="2">Nombre de Joueurs</th>
             <td>{{nbr_joueurs}}</td>
-    </tr>
-  </tfoot>
-</table>
+        </tr>
+        </tfoot>
+    </table>
 
-<table class="titulaire">
+    <table class="titulaire">
 
-  <caption>
-    Tableau des Titulaires de DESTROY ACADEMY
-  </caption>
+        <caption>
+            Tableau des Titulaires de DESTROY ACADEMY
+        </caption>
 
-  <thead>
-    <tr>
-        <th scope="col">Pseudo</th>
-        <th scope="col">Role</th>
-        <th scope="col"> Droit</th>
-        <th scope="col">Connecté</th>
-    </tr>
-  </thead>
+        <thead>
+        <tr>
+            <th scope="col">Pseudo</th>
+            <th scope="col">Role</th>
+            <th scope="col">Connecté</th>
+        </tr>
+        </thead>
 
-  <tbody>
+        <tbody>
 
-    {% if roaster | length >= 1 %}
+        {% if roaster | length >= 1 %}
         {% for ligne in roaster %}
         {% if ligne.titulaire == true %}
-           <tr>
-                  <td>{{ ligne.pseudo }}</td>
-                  <td>{{ ligne.libelle }}</td>
-                    <td>{{ligne.fonction}}</td>
-                  <td>X</td>
-           </tr>
+        <tr>
+            <td>{{ ligne.pseudo }}</td>
+            <td>{{ ligne.libelle }}</td>
+
+            <td>
+                {% if ligne.connected == 1 %}
+                    {% set etat = 'ONLINE' %}
+                    <b class="online">{{etat}}</b>
+                {% else %}
+                    {% set etat = 'OFFLINE' %}
+                    <em class="offline"><b>{{etat}}</b></em>
+                {% endif %}
+
+            </td>
+        </tr>
         {% endif %}
         {% endfor %}
-    {% else %}
-            <tr>
-                  <td>
-                      pas de joueurs :C
-                  </td>
-           </tr>
-    {% endif %}
+        {% else %}
+        <tr>
+            <td>
+                pas de joueurs :C
+            </td>
+        </tr>
+        {% endif %}
 
 
-  </tbody>
+        </tbody>
 
-  <tfoot>
-    <tr>
-            <th scope="row" colspan="3">Nombre de Joueurs</th>
-            <td>{{nbr_joueurs}}</td>
-    </tr>
-  </tfoot>
-</table>
-    </div>
+        <tfoot>
+        <tr>
+            <th scope="row" colspan="2">Nombre de Joueurs</th>
+            <td>{{nbr_titu}}</td>
+        </tr>
+        </tfoot>
+    </table>
+</div>
 </body>
 {% include 'layout/footer.html' %}
