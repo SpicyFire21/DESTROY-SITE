@@ -1,0 +1,146 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+<main>
+
+
+<form action="/admin/player-index/valid" method="post">
+    <fieldset class="edit-index-player">
+        <div class="discord" id="discord">
+            <h2>Discord</h2>
+            {% if discord | length >= 1 %}
+            {% for item in discord %}
+            <div class="admin-discord">
+                <label for="{{item.idindexDiscord}}">{{item.idindexDiscord}}</label>
+                <textarea id="{{item.idindexDiscord}}" name="discord_{{item.idindexDiscord}}">{%  if item.contenu != None %}{{item.contenu}}
+            {% endif %}</textarea>
+                <a href="/admin/player-index-discord/delete/{{item.idindexDiscord}}" class="delete"><i class="fa-solid fa-trash fa-xl" style="color: #000000;"></i></a>
+
+            </div>
+            {% endfor%}
+            <div>
+                <a class="edit" onclick="addDiscord()"><i class="fa-solid fa-circle-plus fa-xl" style="color: #000000;"></i></a>
+                <a href="/admin/player-index-discord/deleteall" class="delete"><i class="fa-solid fa-trash fa-xl" style="color: #000000;"></i></a>
+            </div>
+            {% else %}
+            <div>
+                <a class="edit" onclick="addDiscord()"><i class="fa-solid fa-circle-plus fa-xl" style="color: #000000;"></i></a>
+                <a href="/admin/player-index-discord/deleteall" class="delete"><i class="fa-solid fa-trash fa-xl" style="color: #000000;"></i></a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="patch" id="patch">
+            <h2>Patch Notes</h2>
+            {% if patch | length >= 1 %}
+            {% for item in patch %}
+            <div class="admin-patch">
+                <label for="{{item.idindexPatch}}">{{item.idindexPatch}}</label>
+                    <textarea id="{{item.idindexPatch}}" name="patch_{{item.idindexPatch}}">{%  if item.contenu != None %}{{item.contenu}}
+            {% endif %}</textarea>
+
+                <a href="/admin/player-index-patch/delete/{{item.idindexPatch}}" class="delete"><i class="fa-solid fa-trash fa-xl" style="color: #000000;"></i></a>
+
+            </div>
+            {% endfor %}
+            <div>
+                <a class="edit" onclick="addPatch()"><i class="fa-solid fa-circle-plus fa-xl" style="color: #000000;"></i></a>
+                <a href="/admin/player-index-patch/deleteall" class="delete"><i class="fa-solid fa-trash fa-xl" style="color: #000000;"></i></a>
+            </div>
+
+            {% else %}
+            <div>
+                <a class="edit" onclick="addPatch()"><i class="fa-solid fa-circle-plus fa-xl" style="color: #000000;"></i></a>
+                <a href="/admin/player-index-patch/deleteall" class="delete"><i class="fa-solid fa-trash fa-xl" style="color: #000000;"></i></a>
+            </div>
+            {% endif %}
+        </div>
+
+        <button class="valid-edit" type="submit"><i class="fa-solid fa-circle-check fa-2xl" style="color: #000000;"></i></button>
+
+    </fieldset>
+</form>
+</main>
+
+<script>
+let discordCounter=1;
+let patchCounter =1;
+    function addDiscord() {
+
+        const discord = document.getElementById("discord");
+        const parent = document.getElementsByClassName('discord')[0];
+        const div = document.createElement('div');
+        const label = document.createElement('label');
+        const textarea = document.createElement('textarea');
+        const a = document.createElement('a');
+        const position = discord.children.length-1;
+        const i = document.createElement('i')
+
+
+        const uniqueId = `newDiscord_${discordCounter}`;
+        label.textContent = 'ID';
+        label.setAttribute('for', uniqueId);
+        textarea.id = uniqueId;
+        textarea.name = uniqueId;
+
+        textarea.value = '';
+        a.href = '#';
+        a.textContent = '';
+        a.className = 'delete';
+        a.onclick = function() {
+                parent.removeChild(div);
+            };
+        div.classList.add('admin-discord')
+        i.classList.add('fa-solid')
+        i.classList.add('fa-trash')
+        i.classList.add('fa-xl')
+        i.style.color = '#000000';
+        a.appendChild(i)
+        div.appendChild(label);
+        div.appendChild(textarea);
+        div.appendChild(a);
+        parent.appendChild(div);
+        discord.insertBefore(div, discord.children[position]);
+
+        discordCounter++;
+}
+
+    function addPatch(){
+
+        const patch = document.getElementById("patch");
+        const parent = document.getElementsByClassName('patch')[0];
+        const div = document.createElement('div');
+        const label = document.createElement('label');
+        const textarea = document.createElement('textarea');
+        const a = document.createElement('a');
+        const position = patch.children.length-1;
+        const i = document.createElement('i')
+
+        const uniqueId = `newPatch_${patchCounter}`;
+        label.textContent = 'ID';
+        label.setAttribute('for', uniqueId);
+        textarea.id = uniqueId;
+        textarea.name = uniqueId;
+
+        textarea.value = '';
+        a.href = '#';
+        a.textContent = '';
+        a.className = 'delete';
+        a.onclick = function() {
+                parent.removeChild(div);
+            };
+        div.classList.add('admin-patch')
+        i.classList.add('fa-solid')
+        i.classList.add('fa-trash')
+        i.classList.add('fa-xl')
+        i.style.color = '#000000';
+        a.appendChild(i)
+        div.appendChild(label);
+        div.appendChild(textarea);
+        div.appendChild(a);
+        parent.appendChild(div);
+        patch.insertBefore(div, patch.children[position]);
+        patchCounter++;
+    }
+</script>
+</body>
+{% include 'layout/footer.html' %}

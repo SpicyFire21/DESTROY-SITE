@@ -33,21 +33,30 @@
         <article class="article-player-index">
             <h2>Patch Notes : X</h2>
             <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                {% if patch | length >= 1 %}
+                    {% for item in patch %}
+                        <li>{{item.contenu}}</li>
+
+                    {% endfor %}
+
+                {% else %}
+                        <li>Aucun Patch Récent ...</li>
+                {% endif %}
             </ul>
         </article>
         <article class="article-player-index">
             <h2>Nouveautés du Serveur Discord</h2>
             <ul>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
-                <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quidem?</li>
+                {% if discord | length >= 1 %}
+                    {% for item in discord %}
+                        <li>{{item.contenu}}</li>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <li>Aucune Nouveauté sur le serveur ...</li>
+                {% endif %}
             </ul>
         </article>
 

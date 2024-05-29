@@ -4,7 +4,7 @@
 from flask import Flask, request, render_template, redirect, session, g, flash, abort, url_for
 import pymysql.cursors
 
-
+from controllers.admin_edit_index import *
 from controllers.admin_map_agent import *
 from controllers.admin_match_pracc import *
 from controllers.admin_player import *
@@ -47,6 +47,7 @@ app.register_blueprint(admin_player)
 app.register_blueprint(admin_map_agent)
 app.register_blueprint(admin_match_pracc)
 app.register_blueprint(admin_root)
+app.register_blueprint(admin_edit_index)
 
 app.register_blueprint(player_index)
 app.register_blueprint(player_roaster)

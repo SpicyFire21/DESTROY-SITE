@@ -246,3 +246,40 @@ td,th {
 .compo-td {
     padding: 0;
 }
+
+.edit-index-player {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    justify-items: center;
+    align-items: center;
+}
+
+.admin-patch, .admin-discord {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 5px;
+}
+textarea {
+    border: var(--black) 2px solid;
+    border-radius: 5px;
+}
+
+.patch,.discord {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.valid-edit {
+    padding: 10px 20px ;
+    border-radius: 15px;
+    grid-area: 2 / 1 / 3 / 3;
+}
+
+.table-log {
+    margin: auto;
+}

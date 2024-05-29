@@ -1,5 +1,5 @@
 {% include 'player/player_layout.html' %}
-<body>
+<body onload="selectByRole()">
 <main class="player-compo">
     <table>
 
@@ -29,6 +29,8 @@
 <!--                {{ compo_entry.nomAgent }}-->
                 <img src="https://media.valorant-api.com/agents/{{ compo_entry.imgAgent }}" alt="" class="img-compo-player">
                 {% endif %}
+
+
                 {% endfor %}
 
 
@@ -67,12 +69,22 @@
 
     <form method="POST" action="/compo_edit" class="form-edit-compo">
         <fieldset>
+
             <div>
                 <label for="Map">Map :</label>
                 <select name="Map" id="Map" required>
-                    <option value="">-- Map --</option>
+                    <option value="" selected>-- Map --</option>
                     {% for ligne in maps %}
                     <option value="{{ligne.idMap}}">{{ligne.libelle}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label for="Joueurs">Joueur :</label>
+                <select name="Joueurs" id="Joueurs" onchange="selectByRole()" required>
+                    <option value="" id="not" selected>-- Joueur --</option>
+                    {% for ligne in titulaire %}
+                    <option value="{{ligne.idJoueur}}" id="{{ligne.libelle}}">{{ligne.pseudo}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -87,15 +99,9 @@
                     {% endfor %}
                 </select>
             </div>
-            <div>
-                <label for="Joueurs">Joueur :</label>
-                <select name="Joueurs" id="Joueurs" onchange="selectByRole()">
-                    <option value="">-- Joueur --</option>
-                    {% for ligne in titulaire %}
-                    <option value="{{ligne.idJoueur}}" id="{{ligne.libelle}}">{{ligne.pseudo}}</option>
-                    {% endfor %}
-                </select>
-            </div>
+
+
+
             <button type="submit" name="submitedit" class="submit-edit-compo">MODIFIER</button>
         </fieldset>
 
@@ -109,13 +115,23 @@
     const selectedOption = document.getElementById("Joueurs").options[document.getElementById("Joueurs").selectedIndex];
     const Aoptions = document.querySelectorAll('#Agent option');
 
-    Aoptions.forEach(option => {
+    if (selectedOption.id !== 'not'){
+        Aoptions.forEach(option => {
         if (option.id !== ''){
             option.style.display = (selectedOption.id === option.id || selectedOption.id === 'Flex') ? '' : 'none';
         }
-
     });
+    } else {
+        Aoptions.forEach(option => {
+            option.style.display = (option.id !== '') ? 'none': '';
+        });
+    }
+
+
+
 }
+
+
 
 
 </script>

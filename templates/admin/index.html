@@ -1,3 +1,41 @@
 {% include 'admin/admin_layout.html' %}
-<h1>Bienvenue {{staff.nomAdmin}}</h1>
+
+<body>
+<main>
+    <h1>Bienvenue {{staff.nomAdmin}}</h1>
+
+    <table class="table-log">
+            <thead>
+                <th>ID LOG</th>
+                <th>ID ADMIN</th>
+                <th>TYPE</th>
+                <th>OBJET</th>
+                <th>DÉTAILS</th>
+                <th>DATE</th>
+            </thead>
+            <tbody>
+                {% if logs | length >= 1 %}
+                {% for item in logs %}
+                    <tr>
+                        <td>{{item.idlog}}</td>
+                        <td>{{item.nomAdmin}} ({{item.idAdmin}})</td>
+                        <td>{{item.typeaction}}</td>
+                        <td>{{item.oldaction}}</td>
+                        <td>{{item.newaction}}</td>
+                        <td>{{item.date}}</td>
+                    </tr>
+                {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="40">Aucun Log</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+    </table>
+
+</main>
+</body>
+
+
+
 {% include 'layout/footer.html' %}
