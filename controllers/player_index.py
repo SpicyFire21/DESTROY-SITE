@@ -19,11 +19,17 @@ def player_show():
     player = mycursor.fetchone()
     print(player)
 
-
     sql_match = '''SELECT * FROM matchs order by date_match asc LIMIT 10;'''
     mycursor.execute(sql_match)
     matchs = mycursor.fetchall()
 
+    sql_discord = '''SELECT * FROM indexDiscord;'''
+    mycursor.execute(sql_discord)
+    discord = mycursor.fetchall()
+
+    sql_patch = '''SELECT * FROM indexPatch;'''
+    mycursor.execute(sql_patch)
+    patch = mycursor.fetchall()
 
     # connecté en tant que
     id_user = session['id_user']
@@ -35,7 +41,11 @@ def player_show():
 
 
     if player:
-        return render_template('player/index.html', player = player, playersession = playersession,matchs = matchs)
+        return render_template('player/index.html', player = player,
+                               playersession = playersession,
+                               matchs = matchs,
+                               discord = discord,
+                               patch = patch)
     else:
         flash(u'Vous n\'avez pas les droits pour être inscrit en tant que Joueur ou votre compte n\'existe pas.', 'alert-warning')
         return redirect('/login')

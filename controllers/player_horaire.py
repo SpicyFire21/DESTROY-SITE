@@ -52,7 +52,7 @@ def player_horaire_fetch():
     mycursor = get_db().cursor()
     id_user = session['id_user']
     data = request.json
-    print('Données reçues depuis le frontend :', data)
+
     sql_select_all = '''SELECT * FROM horaire WHERE idJoueur=%s;'''
     mycursor.execute(sql_select_all, (id_user,))
     allHoraire = mycursor.fetchall()
@@ -75,7 +75,7 @@ def player_horaire_fetch():
         if not frontend_exists:
             sql_delete = '''DELETE FROM horaire WHERE idJoueur=%s AND idHeure=%s AND idJour=%s;'''
             mycursor.execute(sql_delete, (id_user, heure, jour))
-            print(f"Suppression de l'entrée : idHeure={heure}, idJour={jour}")
+
 
     # Ajouter les nouvelles entrées qui ne sont pas en base de données
     for itemdata in data:
@@ -93,9 +93,7 @@ def player_horaire_fetch():
         if not bdd_exists:
             sql_insert = '''INSERT INTO horaire (idJoueur, idHeure, idJour) VALUES (%s, %s, %s);'''
             mycursor.execute(sql_insert, (id_user, row, col))
-            print(f"Ajout de l'entrée : idHeure={row}, idJour={col}")
-        else:
-            print(f"L'entrée existe déjà en base de données : idHeure={row}, idJour={col}")
+
 
     get_db().commit()
     return redirect('/horaire/show')

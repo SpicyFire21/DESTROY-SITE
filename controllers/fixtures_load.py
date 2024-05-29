@@ -8,13 +8,12 @@ fixtures_load = Blueprint('fixtures_load', __name__, template_folder = 'template
 
 @fixtures_load.route('/base/init')
 def fct_fixtures_load():
+    print("BDD INIT")
     cursor = get_db().cursor()
-
-    with open('script.sql', 'r') as f:
+    with open('script.sql', 'r', encoding='utf-8') as f:
         sql = f.read()
         sqlCommands = sql.replace('\n', '').split(';')
         for command in sqlCommands:
-            print('sql :',sqlCommands)
             try:
                 if command.strip() != '':
                     cursor.execute(command)

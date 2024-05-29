@@ -47,9 +47,6 @@ def auth_login_post():
             sql_c = '''UPDATE utilisateur u set u.connected=1, u.fonction=%s where idUtilisateur=%s;'''
             mycursor.execute(sql_c,(fonction,id,))
 
-
-
-            print("GG")
             if session['fonction'] == 'ADMIN':
                 return redirect('/admin/index')
             elif session['fonction'] == 'PLAYER':
@@ -83,7 +80,7 @@ def auth_signup_post():
 
     # ajouter un nouveau user
     password = generate_password_hash(password, method = 'pbkdf2:sha256')
-    tuple_insert = (pseudo, login, email, password, 'visitor',)  # changer player par visitor
+    tuple_insert = (pseudo, login, email, password, 'visitor',)
     sql = """  INSERT INTO utilisateur (nomUtilisateur,login,email, mdp,fonction) VALUES (%s, %s, %s, %s, %s);  """
     mycursor.execute(sql, tuple_insert)
     print(tuple_insert)

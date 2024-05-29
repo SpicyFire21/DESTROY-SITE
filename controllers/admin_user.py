@@ -2,9 +2,10 @@
 # -*- coding:utf-8 -*-
 from flask import Blueprint
 from flask import Flask, request, render_template, redirect, abort, flash, session
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from connection_bdd import get_db
+from controllers.admin_log import log_edit
 
 admin_user = Blueprint('admin_user', __name__,
                        template_folder = 'templates')
@@ -57,12 +58,23 @@ def valid_admin_users_edit():
     name = request.form.get('nom', '')
     login = request.form.get('login', '')
     email = request.form.get('email', '')
-    # mdp = request.form.get('mdp', '')
+    mdp = request.form.get('mdp', '')
 
-    # mdp = generate_password_hash(mdp, method = 'pbkdf2:sha256')
+    sql_oldaction = '''SELECT * FROM utilisateur WHERE idUtilisateur=%s;'''
+    mycursor.execute(sql_oldaction, (id,))
+    old = mycursor.fetchone()
+    mdp_check = check_password_hash(old['mdp'], mdp)
+    if not mdp or mdp_check:
+        mdp = old['mdp']
 
-    sql = '''UPDATE utilisateur u set u.nomUtilisateur=%s, u.login=%s, u.email=%s where u.idUtilisateur=%s;'''
-    mycursor.execute(sql, (name, login, email, id))
+    sql_update = '''UPDATE utilisateur SET nomUtilisateur=%s, login=%s, email=%s,mdp=%s WHERE idUtilisateur=%s;'''
+    mycursor.execute(sql_update, (name, login, email, mdp, id))
+
+    sql_newaction = '''SELECT * FROM utilisateur WHERE idUtilisateur=%s;'''
+    mycursor.execute(sql_newaction, (id,))
+    new = mycursor.fetchone()
+    log_edit("UTILISATEURS", old, new)
+
     get_db().commit()
     return redirect('/admin/users_show')
 
@@ -72,7 +84,7 @@ def admin_users_delete(id):
     mycursor = get_db().cursor()
 
     sql = '''SELECT idUtilisateur,idJoueur,idAdmin from utilisateur where idUtilisateur =%s;'''
-    mycursor.execute(sql,(id,))
+    mycursor.execute(sql, (id,))
     jsonreturn = mycursor.fetchone()
     id_j = jsonreturn['idJoueur']
     id_a = jsonreturn['idAdmin']
@@ -85,7 +97,6 @@ def admin_users_delete(id):
 
     sql1 = '''DELETE FROM utilisateur where idUtilisateur=%s;'''
     mycursor.execute(sql1, (id,))
-
 
     get_db().commit()
     return redirect('/admin/users_show')
@@ -103,7 +114,7 @@ def admin_users_add_player(id):
 
     role = 8
     sql_insert = '''INSERT INTO joueurs (pseudo, titulaire,idRole) VALUES (%s,%s,%s);'''
-    mycursor.execute(sql_insert, (pseudo, titulaire,role))
+    mycursor.execute(sql_insert, (pseudo, titulaire, role))
 
     sql_id_select = '''SELECT max(idJoueur) from joueurs;'''
     mycursor.execute(sql_id_select)
@@ -118,6 +129,7 @@ def admin_users_add_player(id):
     message = 'Utilisateur promu Joueur ! | ' + pseudo
     flash(message, 'add')
     return redirect('/admin/users_show')
+
 
 @admin_user.route('/admin/users_add_admin/<id>', methods = ['GET'])
 def admin_users_add_admin(id):

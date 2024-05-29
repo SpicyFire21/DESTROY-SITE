@@ -2,11 +2,10 @@
 # -*- coding:utf-8 -*-
 
 from flask import Blueprint
-from flask import Flask, request, render_template, redirect, flash, session
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask import render_template, session
 
 from connection_bdd import get_db
-from controllers.admin_map_agent import pyfetchMap
+from controllers.admin_map_agent import pyfetchMap, pyfetchAgent
 
 player_strats = Blueprint('player_strats', __name__,
                           template_folder = 'templates')
@@ -16,7 +15,7 @@ player_strats = Blueprint('player_strats', __name__,
 def player_strats_show():
     mycursor = get_db().cursor()
     pyfetchMap()
-
+    pyfetchAgent()
     sql_map = '''SELECT * from map;'''
     mycursor.execute(sql_map)
     maps = mycursor.fetchall()
@@ -29,7 +28,7 @@ def player_strats_show():
     ;'''
     mycursor.execute(sql_compo)
     compo = mycursor.fetchall()
-    print("compo",compo)
+    print("compo", compo)
     print("maps", maps)
 
     # connecté en tant que

@@ -5,6 +5,7 @@ from flask import Flask, request, render_template, redirect, abort, flash, sessi
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from connection_bdd import get_db
+from controllers.admin_log import log_delete
 
 admin_root = Blueprint('admin_root', __name__,
                        template_folder = 'templates')
@@ -37,18 +38,13 @@ def root_login():
     root = mycursor.fetchone()
 
     if root:
-        print('connected')
         mdp_check = check_password_hash(root['mdp'], mdp)
         if mdp_check:
-            print('checked')
             return redirect('/admin/show')
-
         else:
-            print('refused')
             flash(u'Vérifier votre mot de passe et essayer encore.', 'alert-warning')
             return redirect('/admin/root/login')
     else:
-        print('logout')
         flash(u'Vérifier votre login et essayer encore ou vous n\'avez pas de compte.', 'alert-warning')
         return redirect('/admin/root/login')
 
@@ -62,7 +58,6 @@ def admin_show():
     mycursor.execute(sql)
     admins = mycursor.fetchall()
 
-
     # connecté en tant que
     id_user = session['id_user']
     sql_ps = '''SELECT * FROM utilisateur u 
@@ -71,3 +66,18 @@ def admin_show():
     mycursor.execute(sql_ps, (id_user,))
     adminsession = mycursor.fetchone()
     return render_template('admin/admin_show.html', admins = admins, adminsession = adminsession)
+
+
+@admin_root.route('/admin/admin_delete/<id>')
+def admin_delete(id):
+    mycursor = get_db().cursor()
+    sql_select = '''SELECT idAdmin,nomAdmin FROM admin where idAdmin=%s;'''
+    mycursor.execute(sql_select, (id,))
+    admin = mycursor.fetchone()
+    log_delete("ADMIN", admin)
+    sql_delete = '''DELETE FROM admin where idAdmin=%s;'''
+    mycursor.execute(sql_delete, (id,))
+    sql = '''UPDATE utilisateur set idAdmin=null where idAdmin=%s;'''
+    mycursor.execute(sql, (id,))
+    get_db().commit()
+    return redirect('/admin/root/login')
