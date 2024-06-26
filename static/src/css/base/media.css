@@ -31,3 +31,18 @@
     aspect-ratio: auto;
     max-width: 50px;
 }
+
+.photo-profil {
+    max-width: 50px;
+    height: auto;
+    aspect-ratio:1/1;
+    border-radius:150px;
+    border:2px solid var(--black);
+}
+
+.img-profile-selected {
+    max-width: 50px;
+    height: auto;
+    aspect-ratio:1/1;
+    border-radius:150px;
+}

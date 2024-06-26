@@ -1,0 +1,24 @@
+{% include 'admin/admin_layout.html' %}
+<body>
+    <h1>Upload Image</h1>
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <hr>
+
+    <!-- Afficher l'image directement -->
+
+
+
+    {% for item in files  %}
+        <img src="{{ url_for('testimagebdd.image', file_id=item.id) }}" style="max-width: 300px; height: auto;">
+    {% endfor %}
+
+
+
+
+
+</body>
+{% include 'layout/footer.html' %}

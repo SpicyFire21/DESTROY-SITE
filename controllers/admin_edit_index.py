@@ -6,6 +6,7 @@ import pymysql
 import requests
 
 from connection_bdd import get_db
+from controllers.admin_session import admin_session
 
 admin_edit_index = Blueprint('admin_edit_index', __name__,
                              template_folder = 'templates')
@@ -23,13 +24,7 @@ def admin_edit_index_show():
     mycursor.execute(sql_patch)
     patch = mycursor.fetchall()
 
-    # connecté en tant que
-    id_user = session['id_user']
-    sql_ps = '''SELECT * FROM utilisateur u 
-               join admin a on u.idAdmin = a.idAdmin
-               where u.idJoueur=%s;'''
-    mycursor.execute(sql_ps, (id_user,))
-    adminsession = mycursor.fetchone()
+    adminsession = admin_session()
     auto_del()
     get_db().commit()
     return render_template('admin/admin_edit_index.html', adminsession = adminsession, discord = discord, patch = patch)
@@ -63,7 +58,7 @@ def admin_edit_index_show():
 
 @admin_edit_index.route('/admin/player-index-discord/delete/<id>')
 def admin_delete_discord(id):
-    id_user = session['id_user']
+    id_admin = session['id_admin']
     mycursor = get_db().cursor()
     sql = '''delete from indexdiscord where idindexDiscord=%s;'''
     mycursor.execute(sql, (id,))
@@ -73,7 +68,7 @@ def admin_delete_discord(id):
 
 @admin_edit_index.route('/admin/player-index-patch/delete/<id>')
 def admin_delete_patch(id):
-    id_user = session['id_user']  # pour les logs admins
+    id_admin = session['id_admin']  # pour les logs admins
     mycursor = get_db().cursor()
     sql = '''delete from indexpatch where idindexPatch=%s;'''
     mycursor.execute(sql, (id,))
@@ -81,66 +76,81 @@ def admin_delete_patch(id):
     return redirect('/admin/index/edit')
 
 
-@admin_edit_index.route('/admin/player-index/valid', methods = ['POST'])
+@admin_edit_index.route('/admin/player-index/valid', methods=['POST'])
 def admin_valid_newindex():
-    id_user = session['id_user']
     mycursor = get_db().cursor()
-    id_user = session['id_user']
-    sql_admin = '''SELECT nomAdmin From admin where idAdmin=%s;'''
-    mycursor.execute(sql_admin, (id_user,))
-    Admin = mycursor.fetchone()
-    nomAdmin = Admin['nomAdmin']
-    print(nomAdmin)
-    discord_upd = []
-    patch_upd = []
-    discord_add = []
-    patch_add = []
+    try:
+        id_admin = session['id_user']
+        get_db().begin()
+        sql_admin = '''SELECT nomAdmin FROM admin WHERE idAdmin=%s;'''
+        mycursor.execute(sql_admin, (id_admin,))
+        Admin = mycursor.fetchone()
+        if not Admin:
+            flash('Admin non trouvé', 'delete')
+            return redirect('/admin/index/edit')
+        nomAdmin = Admin['nomAdmin']
 
-    for key, value in request.form.items():
-        if key.startswith('discord_'):
-            discord_id = key.split('discord_')[1]
-            discord_upd.append({'id': discord_id, 'content': value})
-        elif key.startswith('patch_'):
-            patch_id = key.split('patch_')[1]
-            patch_upd.append({'id': patch_id, 'content': value})
-        elif key.startswith('newDiscord'):
+        discord_upd, patch_upd, discord_add, patch_add = [], [], [], []
 
-            discord_add.append({'nomAdmin': nomAdmin, 'content': value})
-        elif key.startswith('newPatch'):
+        for key, value in request.form.items():
+            if key.startswith('discord_'):
+                discord_id = key.split('discord_')[1]
+                discord_upd.append({'id': discord_id, 'content': value})
+            elif key.startswith('patch_'):
+                patch_id = key.split('patch_')[1]
+                patch_upd.append({'id': patch_id, 'content': value})
+            elif key.startswith('newDiscord'):
+                discord_add.append({'nomAdmin': nomAdmin, 'content': value})
+            elif key.startswith('newPatch'):
+                patch_add.append({'nomAdmin': nomAdmin, 'content': value})
 
-            patch_add.append({'nomAdmin': nomAdmin, 'content': value})
+        if discord_add:
+            sql_insert_ds = '''INSERT INTO indexdiscord (nomAdmin, contenu, date) VALUES (%s, %s, NOW());'''
+            values_ds = [(item['nomAdmin'], item['content']) for item in discord_add]
+            mycursor.executemany(sql_insert_ds, values_ds)
 
-    # Traitement des données
-    print("Discord upd:", discord_upd)
-    print("Patch upd:", patch_upd)
-    print("Discord add:", discord_add)
-    print("Patch add:", patch_add)
+        if patch_add:
+            sql_insert_pat = '''INSERT INTO indexpatch (nomAdmin, contenu, date) VALUES (%s, %s, NOW());'''
+            values_pat = [(item['nomAdmin'], item['content']) for item in patch_add]
+            mycursor.executemany(sql_insert_pat, values_pat)
 
-    if discord_add:
-        sql_insert_ds = '''INSERT INTO indexdiscord (nomAdmin, contenu, date) VALUES (%s,%s,NOW());'''
-        values_ds = [(item['nomAdmin'], item['content']) for item in discord_add]
-        print(values_ds)
-        mycursor.executemany(sql_insert_ds, values_ds)
-    if patch_add:
-        sql_insert_pat = '''INSERT INTO indexpatch (nomAdmin, contenu, date) VALUES (%s,%s,NOW());'''
-        values_pat = [(item['nomAdmin'], item['content']) for item in patch_add]
-        print(values_pat)
-        mycursor.executemany(sql_insert_pat, values_pat)
+        if discord_upd:
+            sql_update_ds = '''UPDATE indexdiscord SET contenu=%s, date=NOW() WHERE idindexDiscord=%s;'''
+            for item in discord_upd:
+                mycursor.execute(sql_update_ds, (item['content'], item['id']))
 
-    auto_del()
+        if patch_upd:
+            sql_update_pat = '''UPDATE indexpatch SET contenu=%s, date=NOW() WHERE idindexPatch=%s;'''
+            for item in patch_upd:
+                mycursor.execute(sql_update_pat, (item['content'], item['id']))
+        auto_del()
+        get_db().commit()
+        flash('Index mis à jour avec succès', 'edited')
+    except Exception as e:
+        get_db().rollback()
+        flash(f"Erreur lors de la mise à jour de l'index: {e}", 'delete')
 
-    get_db().commit()
     return redirect('/admin/index/edit')
+
 
 
 def auto_del():
     mycursor = get_db().cursor()
-    sql_del_ds = '''DELETE FROM indexdiscord WHERE TRIM(contenu) = '' AND contenu IS NOT NULL;'''
-    sql_del_pat = '''DELETE FROM indexpatch WHERE TRIM(contenu) = '' AND contenu IS NOT NULL;'''
-    mycursor.execute(sql_del_ds)
-    mycursor.execute(sql_del_pat)
-    get_db().commit()
-    return "deleted"
+    try:
+
+        sql_del_ds = '''DELETE FROM indexdiscord WHERE TRIM(contenu) = '' AND contenu IS NOT NULL;'''
+        sql_del_pat = '''DELETE FROM indexpatch WHERE TRIM(contenu) = '' AND contenu IS NOT NULL;'''
+
+        mycursor.execute(sql_del_ds)
+        mycursor.execute(sql_del_pat)
+
+        get_db().commit()
+    except Exception as e:
+        get_db().rollback()
+        print(f"Erreur lors de la suppression automatique des entrées vides: {e}")
+    finally:
+        mycursor.close()
+
 
 
 

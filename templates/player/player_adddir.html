@@ -1,0 +1,74 @@
+{% include 'player/player_layout.html' %}
+<body>
+<main>
+<form action="/dir/add" method="post">
+    <fieldset class="directory-add">
+        <input type="hidden" value="{{map}}" name="idmap">
+
+        <div>
+        <label for="name"> Nom</label>
+        <input type="text" name="name" id="name">
+        </div>
+        <div>
+        <label for="description"> Description</label>
+        <textarea id="description" name="description" style="width: 65%"></textarea>
+        </div>
+        <div class="addfile" style="display: none">
+            <input type="file" name="" id="">
+        </div>
+        <a onclick="addFile()">Ajouter un plan</a>
+        <button type="submit">Créer</button>
+    </fieldset>
+</form>
+</main>
+<script>
+    function addFile() {
+    const div = document.createElement('div');
+
+    const nameLabel = document.createElement('label');
+    nameLabel.setAttribute('for', 'name');
+    nameLabel.textContent = 'Name:';
+
+    const name = document.createElement('input');
+    name.setAttribute('id', 'name');
+    name.setAttribute('name', 'name');
+    name.setAttribute('type', 'text'); // Si 'name' est un champ texte
+
+    const descLabel = document.createElement('label');
+    descLabel.setAttribute('for', 'description');
+    descLabel.textContent = 'Description:';
+
+    const desc = document.createElement('input');
+    desc.setAttribute('id', 'description');
+    desc.setAttribute('name', 'description');
+    desc.setAttribute('type', 'text'); // Si 'description' est un champ texte
+
+    const fileLabel = document.createElement('label');
+    fileLabel.setAttribute('for', 'file');
+    fileLabel.textContent = 'File:';
+
+    const file = document.createElement('input');
+    file.setAttribute('id', 'file');
+    file.setAttribute('name', 'file');
+    file.setAttribute('type', 'file'); // Spécifiez le type 'file' pour l'input de fichier
+
+    div.appendChild(nameLabel);
+    div.appendChild(name);
+    div.appendChild(descLabel);
+    div.appendChild(desc);
+    div.appendChild(fileLabel);
+    div.appendChild(file);
+
+    // Ciblez le form et le fieldset corrects
+    const form = document.querySelector('form'); // Ciblez le formulaire par sa balise (vous pouvez ajouter un id ou une classe spécifique pour plus de précision)
+    const fieldset = form.querySelector('fieldset'); // Ciblez le fieldset dans ce formulaire
+
+    // Ajoutez le div dans le fieldset
+    fieldset.appendChild(div);
+}
+
+
+
+</script>
+</body>
+{% include 'layout/footer.html' %}

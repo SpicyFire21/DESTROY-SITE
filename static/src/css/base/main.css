@@ -150,17 +150,23 @@ td,th {
 }
 
 .custom-file-upload {
-  border: 1px solid #ccc;
+    border: 1px solid #ccc;
     border-radius: 50%;
-  display: inline-block;
-  padding: 6px 12px;
-  cursor: pointer;
+    display:flex;
+    cursor: pointer;
+    min-width:50px ;
+    width: fit-content;
+    aspect-ratio: 1/1;
+    padding: 5px;
+   justify-content: center;
+    align-items: center;
+
 }
 
 .player-compo,.visitor-games,.admin-games {
     display: flex;
     flex-direction: row;
-        align-items: center;
+    align-items: center;
 
 }
 
@@ -173,6 +179,17 @@ td,th {
 
 .player-strats aside {
     width: fit-content;
+
+
+}
+.player-strats{
+    display: flex;
+
+}
+
+.strats-content {
+    padding-top: 35px;
+    width: 100%;
 }
 
 .offline {
@@ -282,4 +299,20 @@ textarea {
 
 .table-log {
     margin: auto;
+}
+
+.directory-add {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+    margin: auto 35%;
+    align-items: stretch;
+}
+
+.directory-add div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px    ;
 }

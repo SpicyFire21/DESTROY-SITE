@@ -12,12 +12,19 @@
 
         <div class="display-log">
 
+                {% if playersession.imgProfile == None %}
+                        <i class="fa-solid fa-circle-user fa-2xl" style="color: #000000;"></i>
+<!--                    <img src="{{ url_for('static', filename='assets/img/no_img.jpg') }}" alt="">-->
+                {% else %}
+                        <img src="{{ url_for('edit_account.image', id=playersession.idJoueur) }}" class="photo-profil">
+
+                {% endif %}
                 <em>Compte :  </em>
                 <b class="b-player"><i class="fa-solid fa-gamepad fa-beat" ></i> {{playersession.pseudo}} </b>
 
 
         </div>
-        <a href="/editaccount_player"><i class="fa-solid fa-user-pen" style="color: #000000;"></i></a>
+        <a href="/editaccount"><i class="fa-solid fa-user-pen" style="color: #000000;"></i></a>
         <a href="/logout"><i class="fa-solid fa-right-to-bracket" style="color: #000000;"></i></a>
 
     </div>

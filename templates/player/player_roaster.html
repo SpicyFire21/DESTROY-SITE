@@ -9,6 +9,7 @@
 
         <thead>
         <tr>
+            <th scope="col">Profil</th>
             <th scope="col">Pseudo</th>
             <th scope="col">Role</th>
 
@@ -22,6 +23,13 @@
         {% for ligne in players %}
 
         <tr>
+            <td>{% if ligne.imgProfile == None %}
+                        <i class="fa-solid fa-circle-user fa-2xl" style="color: #000000;"></i>
+<!--                    <img src="{{ url_for('static', filename='assets/img/no_img.jpg') }}" alt="">-->
+                {% else %}
+                        <img src="{{ url_for('edit_account.image', id=ligne.idJoueur) }}" style="max-width: 50px; height: auto; aspect-ratio:1/1;border-radius:150px ">
+
+                {% endif %}</td>
             <td>{{ ligne.pseudo }}</td>
             <td>{{ ligne.libelle }}</td>
             <td>
@@ -50,7 +58,7 @@
 
         <tfoot>
         <tr>
-            <th scope="row" colspan="2">Nombre de Joueurs</th>
+            <th scope="row" colspan="3">Nombre de Joueurs</th>
             <td>{{nbr_joueurs}}</td>
         </tr>
         </tfoot>
@@ -64,6 +72,7 @@
 
         <thead>
         <tr>
+            <th scope="col">Profil</th>
             <th scope="col">Pseudo</th>
             <th scope="col">Role</th>
             <th scope="col">Connecté</th>
@@ -76,6 +85,13 @@
         {% for ligne in roaster %}
         {% if ligne.titulaire == true %}
         <tr>
+            <td>{% if ligne.imgProfile == None %}
+                        <i class="fa-solid fa-circle-user fa-2xl" style="color: #000000;"></i>
+<!--                    <img src="{{ url_for('static', filename='assets/img/no_img.jpg') }}" alt="">-->
+                {% else %}
+                        <img src="{{ url_for('edit_account.image', id=ligne.idJoueur) }}" style="max-width: 50px; height: auto; aspect-ratio:1/1;border-radius:150px ">
+
+                {% endif %}</td>
             <td>{{ ligne.pseudo }}</td>
             <td>{{ ligne.libelle }}</td>
 
@@ -105,7 +121,7 @@
 
         <tfoot>
         <tr>
-            <th scope="row" colspan="2">Nombre de Joueurs</th>
+            <th scope="row" colspan="3">Nombre de Joueurs</th>
             <td>{{nbr_titu}}</td>
         </tr>
         </tfoot>

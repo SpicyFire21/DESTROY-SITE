@@ -1,41 +1,118 @@
 {% include 'player/player_layout.html' %}
 <body>
 <main class="player-strats">
-<aside>
+    <aside>
 
-    {% for map in maps %}
-    <div class="aside-content" >
-        <img src="https://media.valorant-api.com/maps/{{ map.imgMap }}" alt="" class="img-strats">
-        <u onclick="showCompo( {{map.idMap}} )">{{map.libelle}}</u>
-    {% for item in compo %}
-        {% if map.idMap == item.idMap %}
-            <div class="compo-map" style="display: none;" name="{{item.idMap}}" >
+        {% for map in maps %}
+        <div class="aside-content" onclick="showCompo( {{map.idMap}} )">
+            <img src="https://media.valorant-api.com/maps/{{ map.imgMap }}" alt="" class="img-strats">
+            <u>{{map.libelle}}</u>
+        </div>
 
-                    <p>{{item.pseudo}}</p>
-                <br>
-                    <p>{{item.nomAgent}}</p>
-            </div>
-        {% endif %}
-        {% endfor %}
+
+        {%endfor%}
+
+    </aside>
+    <div class="strats-content" id="fake-div">
+        <h2>Choissisez une Map</h2>
+    </div>
+    <div id="real-div" style="display: none">
+
+        <a id="dossier" href="dir/add/">Nouveau Dossier</a>
+        <a href="https://valoplant.gg/fr"> ValoPlant</a>
+        <div style="display: flex">
+            {% for map in maps %}
+            {% for item in compo %}
+
+            {% if map.idMap == item.idMap %}
+
+            <img class="compo-map" name="{{item.idMap}}" src="https://media.valorant-api.com/agents/{{item.imgAgent}}"
+                 alt="" style="width: 100px; aspect-ratio: 1/1">
+
+
+            {% endif %}
+            {% endfor %}
+            {% endfor %}
+        </div>
+        <table id="dataTable">
+            <thead>
+            <tr class="no-result">
+                <th>Nom</th>
+                <th>Image</th>
+                <th colspan="3">Opérations</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% if dossier | length > 0 %}
+            {% for item in dossier %}
+            <tr class="{{item.idMap}}">
+                <td>
+                    <p><b>{{item.nomDossier}}</b></p>
+                </td>
+                <td>
+                    <img src="https://cdn-0001.qstv.on.epicgames.com/spbduGeODldQXSaWaZ/image/landscape_comp.jpeg"
+                         alt="" style="width:50px;">
+                </td>
+                <td>
+                    <a href="/dir/show/{{item.idDossier}}"><i class="fa-solid fa-eye" style="color: #000000;"></i></a>
+                </td>
+                <td>
+                    <a href=""><i class="fa-solid fa-pen-to-square" style="color: #000000;"></i></a>
+                </td>
+                <td>
+                    <a href="/dir/delete/{{item.idDossier}}"><i class="fa-solid fa-trash" style="color: #000000;"></i></a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr class="no-result">
+                <td colspan="5">aucun dossier</td>
+            </tr>
+            {% endif %}
+
+            </tbody>
+        </table>
     </div>
 
 
-    {%endfor%}
-
-</aside>
 </main>
 
-<script>            
-    function showCompo(Map){
-        console.log(":D →", Map)
+<script>
+    function showCompo(Map) {
         const divs = document.getElementsByClassName("compo-map");
         const compo = document.getElementsByName(Map);
-        for (let i = 0 ; i < divs.length; i++){
+        for (let i = 0; i < divs.length; i++) {
             divs[i].style.display = "none";
         }
-        for (let i = 0 ; i < compo.length; i++){
+        for (let i = 0; i < compo.length; i++) {
             compo[i].style.display = "block";
         }
+        console.log(Map)
+        const fake = document.getElementById('fake-div');
+
+        fake.style.display = "none";
+        const real = document.getElementById('real-div');
+        real.style.display = "";
+
+        const link = document.getElementById('dossier');
+        const url = "dir/add/";
+        link.href = url + Map;
+
+        const trnone = document.querySelectorAll('tr')
+        trnone.forEach(function(tr) {
+            tr.style.display = "none";
+            });
+
+        const tr = document.getElementsByClassName(Map);
+            Array.from(tr).forEach(function(t) {
+            t.style.display = "";
+        });
+
+        const noresult = document.getElementsByClassName('no-result')
+        Array.from(noresult).forEach(function (no) {
+            no.style.display = "";
+        });
+
     }
 </script>
 

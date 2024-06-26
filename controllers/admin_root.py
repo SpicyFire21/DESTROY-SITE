@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from connection_bdd import get_db
 from controllers.admin_log import log_delete
+from controllers.admin_session import admin_session
 
 admin_root = Blueprint('admin_root', __name__,
                        template_folder = 'templates')
@@ -13,15 +14,7 @@ admin_root = Blueprint('admin_root', __name__,
 
 @admin_root.route('/admin/root/login')
 def admin_root_login():
-    mycursor = get_db().cursor()
-
-    # connecté en tant que
-    id_user = session['id_user']
-    sql_ps = '''SELECT * FROM utilisateur u 
-            join admin a on u.idAdmin = a.idAdmin
-            where u.idJoueur=%s;'''
-    mycursor.execute(sql_ps, (id_user,))
-    adminsession = mycursor.fetchone()
+    adminsession = admin_session()
 
     get_db().commit()
     return render_template('admin/admin_root_login.html', adminsession = adminsession)
@@ -58,13 +51,7 @@ def admin_show():
     mycursor.execute(sql)
     admins = mycursor.fetchall()
 
-    # connecté en tant que
-    id_user = session['id_user']
-    sql_ps = '''SELECT * FROM utilisateur u 
-                join admin a on u.idAdmin = a.idAdmin
-                where u.idJoueur=%s;'''
-    mycursor.execute(sql_ps, (id_user,))
-    adminsession = mycursor.fetchone()
+    adminsession = admin_session()
     return render_template('admin/admin_show.html', admins = admins, adminsession = adminsession)
 
 

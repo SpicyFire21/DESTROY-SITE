@@ -1,25 +1,30 @@
 {% include 'player/player_layout.html' %}
 
-
-<form method="POST" action="/editaccount_player" class="form-edit">
+<body>
+<form method="POST" action="/editaccount/player" class="form-edit" enctype="multipart/form-data">
     <div class="form-container">
     <fieldset>
-        <input type="hidden" name="id" value="{{compte.idJoueur}}">
+        <input type="hidden" name="id" value="{{player.idJoueur}}">
 
         <div>
-            <input type="file" id="file-input" style="display: none;">
-            <label for="file-input" class="custom-file-upload">+</label>
-            <img id="selected-image" src="#" alt="Aperçu de l'image" style="display:none;">
+            <input type="file" id="fileInput" style="display: none;" name="file">
+            <label for="fileInput" class="custom-file-upload" style="">
+                <p id="p-file">+</p>
+                <img class="img-profile-selected" id="selected-image" src="#" alt="Aperçu de l'image" style="display: none;">
+
+            </label>
+
+
         </div>
 
 
         <div>
             <label for="pseudo">Pseudo : </label>
-            <input type="text" size="20" value="{{compte.nomUtilisateur}}" name="pseudo" id="pseudo" class="form-control"  required  placeholder="Pseudo" >
+            <input type="text" size="20" value="{{player.nomUtilisateur}}" name="pseudo" id="pseudo" class="form-control"  required  placeholder="Pseudo" >
         </div>
         <div>
             <label for="email">Email : </label>
-            <input type="text" size="20" value="{{compte.email}}" name="email" id="email" class="form-control" required autofocus placeholder="Email" >
+            <input type="text" size="20" value="{{player.email}}" name="email" id="email" class="form-control" required autofocus placeholder="Email" >
         </div>
         <div>
             <label for="mdp">Mot de Passe : </label>
@@ -33,4 +38,22 @@
     <button type="submit" name="submitedit" class="submit-edit">MODIFIER</button>
     </div>
 </form>
+<script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        console.log("get img")
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imagePreview = document.getElementById('selected-image');
+                    const pfile = document.getElementById('p-file')
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                    pfile.style.display = 'none';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+</script>
+</body>
 {% include 'layout/footer.html' %}

@@ -7,6 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from connection_bdd import get_db
 from controllers.admin_map_agent import pyfetchMap, pyfetchAgent
+from controllers.player_session import player_session
 
 player_compo = Blueprint('player_compo', __name__,
                          template_folder = 'templates')
@@ -15,103 +16,97 @@ player_compo = Blueprint('player_compo', __name__,
 @player_compo.route('/compo_show')
 def player_compo_show():
     mycursor = get_db().cursor()
+    try:
+        get_db().begin()
 
+        sql_joueurs = '''SELECT * FROM joueurs 
+                         JOIN role r ON joueurs.idRole = r.idRole
+                         LIMIT 5 ;'''
+        mycursor.execute(sql_joueurs)
+        titulaire = mycursor.fetchall()
 
-    sql_joueurs = '''SELECT * FROM joueurs 
-    join role r on joueurs.idRole = r.idRole
-    LIMIT 5 ;'''
-    mycursor.execute(sql_joueurs)
-    titulaire = mycursor.fetchall()
-
-    sql_map = '''SELECT * FROM map ORDER BY libelle ASC;'''
-    mycursor.execute(sql_map)
-    maps = mycursor.fetchall()
-
-    if not maps:
-
-        pyfetchMap()
+        sql_map = '''SELECT * FROM map ORDER BY libelle ASC;'''
         mycursor.execute(sql_map)
         maps = mycursor.fetchall()
 
-    sql_agent = '''SELECT * FROM agent where nomAgent not like 'None' ORDER BY nomAgent ASC;'''
-    mycursor.execute(sql_agent)
-    agents = mycursor.fetchall()
+        if not maps:
+            pyfetchMap()
+            mycursor.execute(sql_map)
+            maps = mycursor.fetchall()
 
-    if not agents:
-
-        pyfetchAgent()
+        sql_agent = '''SELECT * FROM agent WHERE nomAgent NOT LIKE 'None' ORDER BY nomAgent ASC;'''
         mycursor.execute(sql_agent)
         agents = mycursor.fetchall()
 
-    # Utilisation des valeurs récupérées dans les requêtes précédentes
-    selected_map_id = [item['idMap'] for item in maps]
-    selected_joueur_id = [item['idJoueur'] for item in titulaire]
-    selected_agent_id = [item['idAgent'] for item in agents]
+        if not agents:
+            pyfetchAgent()
+            mycursor.execute(sql_agent)
+            agents = mycursor.fetchall()
 
-    # Construction de la requête SQL en utilisant des tuples de valeurs
-    sql_compo = '''SELECT j.pseudo,m.libelle,a.nomAgent,j.idJoueur,m.idMap,a.idAgent,a.imgAgent FROM compo 
-                   JOIN agent a ON compo.idAgent = a.idAgent
-                   JOIN map m ON compo.idMap = m.idMap
-                   JOIN joueurs j ON compo.idJoueur = j.idJoueur
-                   WHERE compo.idMap IN %s AND compo.idJoueur IN %s AND compo.idAgent IN %s;'''
+        selected_map_id = [item['idMap'] for item in maps]
+        selected_joueur_id = [item['idJoueur'] for item in titulaire]
+        selected_agent_id = [item['idAgent'] for item in agents]
 
-    # Exécution de la requête SQL en passant les tuples de valeurs
-    mycursor.execute(sql_compo, (tuple(selected_map_id), tuple(selected_joueur_id), tuple(selected_agent_id)))
-    compo = mycursor.fetchall()
-    sql_delete='''DELETE FROM compo WHERE idAgent=1'''
-    mycursor.execute(sql_delete)
+        sql_compo = '''SELECT j.pseudo, m.libelle, a.nomAgent, j.idJoueur, m.idMap, a.idAgent, a.imgAgent 
+                       FROM compo 
+                       JOIN agent a ON compo.idAgent = a.idAgent
+                       JOIN map m ON compo.idMap = m.idMap
+                       JOIN joueurs j ON compo.idJoueur = j.idJoueur
+                       WHERE compo.idMap IN %s AND compo.idJoueur IN %s AND compo.idAgent IN %s;'''
 
-    sql_roles = '''SELECT * From role;'''
-    mycursor.execute(sql_roles)
-    roles = mycursor.fetchall()
+        mycursor.execute(sql_compo, (tuple(selected_map_id), tuple(selected_joueur_id), tuple(selected_agent_id)))
+        compo = mycursor.fetchall()
 
-    # connecté en tant que
-    id_user = session['id_user']
-    sql_ps = '''SELECT * FROM utilisateur u 
-            join joueurs j on u.idJoueur = j.idJoueur
-            where u.idJoueur=%s;'''
-    mycursor.execute(sql_ps, (id_user,))
-    playersession = mycursor.fetchone()
+        sql_delete = '''DELETE FROM compo WHERE idAgent=1'''
+        mycursor.execute(sql_delete)
 
-    print('compo : ', compo)
+        sql_roles = '''SELECT * FROM role;'''
+        mycursor.execute(sql_roles)
+        roles = mycursor.fetchall()
 
-    get_db().commit()
+        playersession = player_session()
+
+        get_db().commit()
+    except Exception as e:
+        get_db().rollback()
+        flash(f"Erreur lors de l'affichage des compositions : {e}", 'error')
+        return redirect('/error_page')
+
     return render_template('player/player_compo.html', titulaire=titulaire, maps=maps, agents=agents,
-                           compo=compo, playersession = playersession, roles = roles)
-
-
+                           compo=compo, playersession=playersession, roles=roles)
 
 
 
 @player_compo.route('/compo_edit', methods = ['POST'])
 def player_compo_edit():
     mycursor = get_db().cursor()
-    id_player = request.form.get('Joueurs', '')
-    id_map = request.form.get('Map', '')
-    id_agent = request.form.get('Agent', '')
-    sql_select = '''SELECT * FROM compo 
-    JOIN agent a ON compo.idAgent = a.idAgent
-    JOIN map m ON compo.idMap = m.idMap
-    JOIN joueurs j ON compo.idJoueur = j.idJoueur
-    WHERE compo.idJoueur=%s AND compo.idMap=%s;'''
-    mycursor.execute(sql_select, (id_player, id_map, ))
-    pick = mycursor.fetchone()
-    print('player : ', id_player)
-    print('map : ', id_map)
-    print('agent : ', id_agent)
-    print(pick)
-    if pick:
-        print('upd')
-        sql_update = '''UPDATE compo SET compo.idAgent = %s WHERE compo.idJoueur=%s AND compo.idMap=%s;'''
-        mycursor.execute(sql_update, (id_agent, id_player, id_map,))
+    try:
+        get_db().begin()
+        id_player = request.form.get('Joueurs', '')
+        id_map = request.form.get('Map', '')
+        id_agent = request.form.get('Agent', '')
+
+        sql_select = '''SELECT * FROM compo 
+                        JOIN agent a ON compo.idAgent = a.idAgent
+                        JOIN map m ON compo.idMap = m.idMap
+                        JOIN joueurs j ON compo.idJoueur = j.idJoueur
+                        WHERE compo.idJoueur=%s AND compo.idMap=%s;'''
+        mycursor.execute(sql_select, (id_player, id_map,))
+        pick = mycursor.fetchone()
+
+        if pick:
+            sql_update = '''UPDATE compo SET compo.idAgent = %s 
+                            WHERE compo.idJoueur=%s AND compo.idMap=%s;'''
+            mycursor.execute(sql_update, (id_agent, id_player, id_map,))
+        else:
+            sql_insert = '''INSERT INTO compo (idJoueur, idMap, idAgent) 
+                            VALUES (%s, %s, %s);'''
+            mycursor.execute(sql_insert, (id_player, id_map, id_agent,))
+
         get_db().commit()
-    else:
-        print('ins')
-        sql_insert = '''INSERT INTO compo (idJoueur, idMap, idAgent) VALUES (%s,%s,%s);'''
-        mycursor.execute(sql_insert, (id_player, id_map, id_agent,))
-        get_db().commit()
-    # je dois choisir la ligne choisie par id joueur et map
-    # je modifier grace a l'id agent
+    except Exception as e:
+        get_db().rollback()
+        flash(f"Erreur lors de la modification de la composition : {e}", 'error')
     return redirect('/compo_show')
 
 

@@ -20,6 +20,15 @@ DROP TABLE IF EXISTS Plan;
 DROP TABLE IF EXISTS indexPatch;
 DROP TABLE IF EXISTS indexDiscord;
 DROP TABLE IF EXISTS log;
+drop table  if exists dossierPlan;
+
+DROP TABLE IF EXISTS images;
+CREATE TABLE if not exists images(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    image LONGBLOB NOT NULL
+);
+
 
 CREATE TABLE IF NOT EXISTS root(
   idRoot INT not null auto_increment,
@@ -48,6 +57,7 @@ CREATE TABLE IF NOT EXISTS joueurs(
 CREATE TABLE IF NOT EXISTS utilisateur(
    idUtilisateur INT not null auto_increment,
    nomUtilisateur VARCHAR(50) ,
+    imgProfile LONGBLOB,
    login VARCHAR(50) ,
    email VARCHAR(50) ,
    mdp VARCHAR(255) ,
@@ -123,8 +133,10 @@ CREATE TABLE IF NOT EXISTS matchs(
     date_ajout DATETIME,
     lien VARCHAR(255),
     idJoueur INT,
+    idAdmin INT,
     PRIMARY KEY (idMatch),
-    FOREIGN KEY (idJoueur) references joueurs(idJoueur)
+    FOREIGN KEY (idJoueur) references joueurs(idJoueur),
+    FOREIGN KEY (idAdmin) references admin(idAdmin)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS pracc(
@@ -134,8 +146,10 @@ CREATE TABLE IF NOT EXISTS pracc(
     date_pracc DATE,
     date_ajout DATETIME,
     idJoueur INT,
+    idAdmin INT,
     PRIMARY KEY (idPracc),
-    FOREIGN KEY (idJoueur) references joueurs(idJoueur)
+    FOREIGN KEY (idJoueur) references joueurs(idJoueur),
+    FOREIGN KEY (idAdmin) references admin(idAdmin)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 
@@ -144,7 +158,19 @@ CREATE TABLE IF NOT EXISTS Plan (
     nomPlan VARCHAR(50),
     description VARCHAR(255),
     Image LONGBLOB,
-    PRIMARY KEY (idPlan)
+    idDossier int,
+    PRIMARY KEY (idPlan),
+    foreign key (idDossier) references dossierPlan(idDossier)
+)CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+
+create table if not exists dossierPlan (
+    idDossier int not null auto_increment,
+    nomDossier VARCHAR(50),
+    description VARCHAR(255),
+    idMap int,
+    primary key (idDossier),
+    foreign key (idMap) references map(idMap)
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS indexDiscord(

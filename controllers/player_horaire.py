@@ -6,6 +6,7 @@ from flask import Flask, request, render_template, redirect, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from connection_bdd import get_db
+from controllers.player_session import player_session
 
 player_horaire = Blueprint('player_horaire', __name__,
                            template_folder = 'templates')
@@ -31,14 +32,7 @@ def player_horaire_show():
     mycursor.execute(sql_player)
     players = mycursor.fetchall()
 
-    # connecté en tant que
-    id_user = session['id_user']
-    sql_ps = '''SELECT * FROM utilisateur u 
-                join joueurs j on u.idJoueur = j.idJoueur
-                where u.idJoueur=%s;'''
-    mycursor.execute(sql_ps, (id_user,))
-    playersession = mycursor.fetchone()
-    get_db().commit()
+    playersession = player_session()
     return render_template('player/player_horaire.html',
                            playersession = playersession,
                            jours = jours,
@@ -47,56 +41,59 @@ def player_horaire_show():
                            players = players)
 
 
-@player_horaire.route('/horaire/fetch', methods = ['POST'])
+@player_horaire.route('/horaire/fetch', methods=['POST'])
 def player_horaire_fetch():
     mycursor = get_db().cursor()
     id_user = session['id_user']
     data = request.json
 
-    sql_select_all = '''SELECT * FROM horaire WHERE idJoueur=%s;'''
-    mycursor.execute(sql_select_all, (id_user,))
-    allHoraire = mycursor.fetchall()
+    try:
+        get_db().begin()
 
-    # Supprimer les entrées existantes qui ne sont pas dans le frontend
-    for horaire in allHoraire:
-        heure = int(horaire['idHeure'])
-        jour = int(horaire['idJour'])
-        frontend_exists = False
-
-        # Vérifier si l'entrée actuelle est présente dans les données frontend
-        for itemdata in data:
-            col = int(itemdata['col'])
-            row = int(itemdata['row'])
-            if row == heure and col == jour:
-                frontend_exists = True
-                break
-
-        # Si l'entrée n'est pas trouvée dans les données frontend, supprimer l'entrée de la base de données
-        if not frontend_exists:
-            sql_delete = '''DELETE FROM horaire WHERE idJoueur=%s AND idHeure=%s AND idJour=%s;'''
-            mycursor.execute(sql_delete, (id_user, heure, jour))
-
-
-    # Ajouter les nouvelles entrées qui ne sont pas en base de données
-    for itemdata in data:
-        col = int(itemdata['col'])
-        row = int(itemdata['row'])
-        bdd_exists = False
+        sql_select_all = '''SELECT * FROM horaire WHERE idJoueur=%s;'''
+        mycursor.execute(sql_select_all, (id_user,))
+        allHoraire = mycursor.fetchall()
 
         for horaire in allHoraire:
             heure = int(horaire['idHeure'])
             jour = int(horaire['idJour'])
-            if row == heure and col == jour:
-                bdd_exists = True
-                break
+            frontend_exists = False
 
-        if not bdd_exists:
-            sql_insert = '''INSERT INTO horaire (idJoueur, idHeure, idJour) VALUES (%s, %s, %s);'''
-            mycursor.execute(sql_insert, (id_user, row, col))
+            for itemdata in data:
+                col = int(itemdata['col'])
+                row = int(itemdata['row'])
+                if row == heure and col == jour:
+                    frontend_exists = True
+                    break
 
+            if not frontend_exists:
+                sql_delete = '''DELETE FROM horaire WHERE idJoueur=%s AND idHeure=%s AND idJour=%s;'''
+                mycursor.execute(sql_delete, (id_user, heure, jour))
 
-    get_db().commit()
+        for itemdata in data:
+            col = int(itemdata['col'])
+            row = int(itemdata['row'])
+            bdd_exists = False
+
+            for horaire in allHoraire:
+                heure = int(horaire['idHeure'])
+                jour = int(horaire['idJour'])
+                if row == heure and col == jour:
+                    bdd_exists = True
+                    break
+
+            if not bdd_exists:
+                sql_insert = '''INSERT INTO horaire (idJoueur, idHeure, idJour) VALUES (%s, %s, %s);'''
+                mycursor.execute(sql_insert, (id_user, row, col))
+
+        get_db().commit()
+    except Exception as e:
+        get_db().rollback()
+        flash(f"Erreur lors de la mise à jour des horaires : {e}", 'error')
+        return redirect('/error_page')
+
     return redirect('/horaire/show')
+
 
 
 @player_horaire.route('/horaire/reset', methods = ['POST'])

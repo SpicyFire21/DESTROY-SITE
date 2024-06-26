@@ -4,6 +4,8 @@
 from flask import Flask, request, render_template, redirect, session, g, flash, abort, url_for
 import pymysql.cursors
 
+from controllers.edit_account import *
+from controllers.testimagebdd import *
 from controllers.admin_edit_index import *
 from controllers.admin_map_agent import *
 from controllers.admin_match_pracc import *
@@ -61,6 +63,9 @@ app.register_blueprint(visitor_match)
 
 app.register_blueprint(nologin_index)
 
+app.register_blueprint(edit_account)
+
+app.register_blueprint(testimagebdd)
 
 
 
