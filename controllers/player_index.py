@@ -4,6 +4,7 @@ from flask import Blueprint
 from flask import Flask, request, render_template, redirect, abort, flash, session
 
 from connection_bdd import get_db
+from controllers.player_session import player_session
 
 player_index = Blueprint('player_index', __name__,
                          template_folder = 'templates')
@@ -31,13 +32,7 @@ def player_show():
     mycursor.execute(sql_patch)
     patch = mycursor.fetchall()
 
-    # connecté en tant que
-    id_user = session['id_user']
-    sql_ps = '''SELECT * FROM utilisateur u 
-        join joueurs j on u.idJoueur = j.idJoueur
-        where u.idJoueur=%s;'''
-    mycursor.execute(sql_ps, (id_user,))
-    playersession = mycursor.fetchone()
+    playersession = player_session()
 
 
     if player:
